@@ -14,37 +14,39 @@ export class LoginComponent implements OnInit {
   hide: Boolean = true;
   floatLabel = 'always';
   login: FormGroup;
-  email: FormControl;
-  password: FormControl;
+  private _email: FormControl;
+  private _password: FormControl;
 
   constructor(public snackBar: MatSnackBar, private _auth: AuthService) { }
 
   ngOnInit() {
-    this.email = new FormControl('', [
-      Validators.required,
-      Validators.pattern(EMAIL_REGEX)]
-      );
-      this.password = new FormControl('', [
-        Validators.required
-      ]);
-      this.login = new FormGroup({
-        email: this.email,
-        password: this.password
-      });
-  }
-
-  isValidEmail() {
-    return this.email.valid || this.email.untouched;
-  }
-
-  isValidPassword() {
-    return this.password.valid || this.password.untouched;
+    this._setProperties();
   }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 3000,
     });
+  }
+
+  private _setProperties() {
+    this._email = new FormControl('', [
+    Validators.required,
+    Validators.pattern(EMAIL_REGEX)]
+    );
+    this._password = new FormControl('', [Validators.required]);
+    this.login = new FormGroup({
+      email: this._email,
+      password: this._password
+    });
+  }
+
+  isValidEmail() {
+    return this._email.valid || this._email.untouched;
+  }
+
+  isValidPassword() {
+    return this._password.valid || this._password.untouched;
   }
 
   onSubmit(values): void {
