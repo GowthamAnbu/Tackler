@@ -1,9 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
 
 import { JobService } from '../../services/job.service';
 import { Ijob } from '../../interfaces/Ijob';
@@ -22,12 +26,21 @@ private _jobs: Ijob[] = [];
 
 @ViewChild(MatPaginator) paginator: MatPaginator;
 @ViewChild(MatSort) sort: MatSort;
+@ViewChild('filter') filter: ElementRef;
 
 constructor(private _jobService: JobService) { }
 
   ngOnInit() {
     this._getJobs();
     this.dataSource = new DashBoardDataSource(this._jobs, this.paginator, this.sort);
+    // Observable for the filter
+    Observable.fromEvent(this.filter.nativeElement, 'keyup')
+    .debounceTime(150)
+    .distinctUntilChanged()
+    .subscribe(() => {
+      if (!this.dataSource) { return; }
+      this.dataSource.filter = this.filter.nativeElement.value;
+    });
   }
 
   private _getJobs() {
@@ -46,11 +59,16 @@ constructor(private _jobService: JobService) { }
 
 export class DashBoardDataSource extends DataSource<any> {
 
+  _filterChange = new BehaviorSubject('');
+  get filter(): string { return this._filterChange.value; }
+  set filter(filter: string) { this._filterChange.next(filter); }
+
   filteredData: Ijob[] = [];
   renderedData: Ijob[] = [];
 
   constructor(private _jobsDatabase: Ijob[], private _paginator: MatPaginator, private _sort: MatSort) {
     super();
+    this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
@@ -59,12 +77,16 @@ export class DashBoardDataSource extends DataSource<any> {
     const displayDataChanges = [
       Observable.of(this._jobsDatabase),
       this._sort.sortChange,
+      this._filterChange,
       this._paginator.page,
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
-      this.filteredData = this._jobsDatabase;
+      this.filteredData = this._jobsDatabase.filter((job: Ijob) => {
+        const searchStr = (job.title).toLowerCase();
+        return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+      });
 
       // Sort filtered data
       const sortedData = this.sortData(this.filteredData.slice());
