@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { AuthService } from './shared/services/auth.service';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { JobService } from './services/job.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [Title, AuthService],
+  providers: [Title, AuthService, JobService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
