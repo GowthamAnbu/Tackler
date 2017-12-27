@@ -16,17 +16,18 @@ import { Ijob } from '../../interfaces/Ijob';
 
 export class DashboardComponent implements OnInit {
 
-displayedColumns: Array<string> = [/* 'id', */ 'title', 'description', 'experience', 'no_of_vacancies' , 'skills'];
+displayedColumns: Array<string> = ['title', 'description', 'experience', 'no_of_vacancies' , 'skills'];
 dataSource: DashBoardDataSource | null;
 private _jobs: Ijob[] = [];
 
+@ViewChild(MatPaginator) paginator: MatPaginator;
 @ViewChild(MatSort) sort: MatSort;
 
 constructor(private _jobService: JobService) { }
 
   ngOnInit() {
     this._getJobs();
-    this.dataSource = new DashBoardDataSource(this._jobs, this.sort);
+    this.dataSource = new DashBoardDataSource(this._jobs, this.paginator, this.sort);
   }
 
   private _getJobs() {
@@ -46,9 +47,9 @@ constructor(private _jobService: JobService) { }
 export class DashBoardDataSource extends DataSource<any> {
 
   filteredData: Ijob[] = [];
-  // renderedData: Ijob[] = [];
+  renderedData: Ijob[] = [];
 
-  constructor(private _jobsDatabase: Ijob[], private _sort: MatSort) {
+  constructor(private _jobsDatabase: Ijob[], private _paginator: MatPaginator, private _sort: MatSort) {
     super();
   }
 
@@ -57,14 +58,21 @@ export class DashBoardDataSource extends DataSource<any> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       Observable.of(this._jobsDatabase),
-      this._sort.sortChange
+      this._sort.sortChange,
+      this._paginator.page,
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
+      // Filter data
       this.filteredData = this._jobsDatabase;
+
       // Sort filtered data
       const sortedData = this.sortData(this.filteredData.slice());
-      return sortedData;
+
+      // Grab the page's slice of the filtered sorted data.
+      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+      this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+      return this.renderedData;
     });
   }
 
@@ -85,8 +93,8 @@ export class DashBoardDataSource extends DataSource<any> {
         case 'no_of_vacancies': [propertyA, propertyB] = [a.no_of_vacancies, b.no_of_vacancies]; break;
       }
 
-      let valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      let valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
       return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
     });
