@@ -1,22 +1,22 @@
-<mat-table #table [dataSource]="dataSource">
-  <ng-container matColumnDef="id">
-    <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+<mat-table #table [dataSource]="dataSource" matSort>
+  <!-- <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
     <mat-cell *matCellDef="let job"> {{job.id}} </mat-cell>
-  </ng-container>
+  </ng-container> -->
   <ng-container matColumnDef="title">
-    <mat-header-cell *matHeaderCellDef>EMAIL</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>TITLE</mat-header-cell>
     <mat-cell *matCellDef="let job"> {{job.title}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="description">
     <mat-header-cell *matHeaderCellDef>DESCRIPTION</mat-header-cell>
     <mat-cell *matCellDef="let job"> {{job.description}} </mat-cell>
   </ng-container>
-  <ng-container matColumnDef="experience">
-    <mat-header-cell *matHeaderCellDef>EXPERIENCE</mat-header-cell>
+  <ng-container matColumnDef="experience" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>EXPERIENCE</mat-header-cell>
     <mat-cell *matCellDef="let job"> {{job.experience}} </mat-cell>
   </ng-container>
-  <ng-container matColumnDef="no_of_vacancies">
-    <mat-header-cell *matHeaderCellDef>VACANCIES</mat-header-cell>
+  <ng-container matColumnDef="no_of_vacancies" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>VACANCIES</mat-header-cell>
     <mat-cell *matCellDef="let job"> {{job.no_of_vacancies}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="skills">
