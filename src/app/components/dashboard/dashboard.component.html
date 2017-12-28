@@ -4,7 +4,7 @@
 <mat-table #table [dataSource]="dataSource" matSort>
   <ng-container matColumnDef="title">
     <mat-header-cell *matHeaderCellDef mat-sort-header>JOB TITLE</mat-header-cell>
-    <mat-cell *matCellDef="let job"> {{job.title}} </mat-cell>
+    <mat-cell *matCellDef="let job"><a [routerLink]="['/rounds',job.id]">{{job.title}}</a></mat-cell>
   </ng-container>
   <ng-container matColumnDef="description">
     <mat-header-cell *matHeaderCellDef>DESCRIPTION</mat-header-cell>

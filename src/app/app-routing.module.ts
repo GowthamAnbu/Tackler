@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './shared/components/login/login.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RoundsComponent } from './components/rounds/rounds.component';
 import { JobListResolverService } from './services/job-list-resolver.service';
 
 const routes: Routes = [
@@ -11,6 +12,10 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     resolve: {jobs: JobListResolverService}
+  },
+  {
+    path: 'rounds/:id',
+    component: RoundsComponent
   },
   {
     path: 'login',

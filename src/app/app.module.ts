@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { JobService } from './services/job.service';
 import { JobListResolverService } from './services/job-list-resolver.service';
 import { AuthService } from './shared/services/auth.service';
+import { RoundsComponent } from './components/rounds/rounds.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AuthService } from './shared/services/auth.service';
     LoginComponent,
     PageNotFoundComponent,
     NavbarComponent,
-    DashboardComponent
+    DashboardComponent,
+    RoundsComponent
   ],
   imports: [
     BrowserModule,
