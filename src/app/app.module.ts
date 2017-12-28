@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RoundsComponent } from './components/rounds/rounds.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { JobService } from './services/job.service';
 import { JobListResolverService } from './services/job-list-resolver.service';
+import { RoundService } from './services/round.service';
+import { RoundListResolverService } from './services/round-list-resolver.service';
 import { AuthService } from './shared/services/auth.service';
-import { RoundsComponent } from './components/rounds/rounds.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { RoundsComponent } from './components/rounds/rounds.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [Title, AuthService, JobService, JobListResolverService],
+  providers: [Title, AuthService, JobService, JobListResolverService, RoundService, RoundListResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,7 +10,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { Ijob } from '../../interfaces/Ijob';
+import { Ijob } from '../../interfaces/ijob';
 
 @Component({
   selector: 'app-dashboard',

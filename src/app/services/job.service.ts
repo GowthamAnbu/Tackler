@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
-import { Ijob } from '../interfaces/Ijob';
+import { Ijob } from '../interfaces/ijob';
 
 @Injectable()
 export class JobService {

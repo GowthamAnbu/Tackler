@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RoundsComponent } from './components/rounds/rounds.component';
 import { JobListResolverService } from './services/job-list-resolver.service';
+import { RoundListResolverService } from './services/round-list-resolver.service';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
   },
   {
     path: 'rounds/:id',
-    component: RoundsComponent
+    component: RoundsComponent,
+    resolve: {rounds: RoundListResolverService}
   },
   {
     path: 'login',
