@@ -17,6 +17,7 @@ import { JobListResolverService } from './services/job-list-resolver.service';
 import { RoundService } from './services/round.service';
 import { RoundListResolverService } from './services/round-list-resolver.service';
 import { AuthService } from './shared/services/auth.service';
+import { QuestionsComponent } from './components/questions/questions.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AuthService } from './shared/services/auth.service';
     PageNotFoundComponent,
     NavbarComponent,
     DashboardComponent,
-    RoundsComponent
+    RoundsComponent,
+    QuestionsComponent
   ],
   imports: [
     BrowserModule,

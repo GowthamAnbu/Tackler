@@ -4,7 +4,10 @@
 <mat-table #table [dataSource]="dataSource" matSort>
   <ng-container matColumnDef="level">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ROUND NAME</mat-header-cell>
-    <mat-cell *matCellDef="let round">{{round.level}}</mat-cell>
+    <mat-cell *matCellDef="let round">
+        <a [routerLink]="['/questions',round.id]" *ngIf="round.state === true;else elseBlock" >{{round.level}}</a>
+        <ng-template #elseBlock>{{round.level}}</ng-template>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="scheduled_time">
     <mat-header-cell *matHeaderCellDef mat-sort-header>SCHEDULED TIME</mat-header-cell>
