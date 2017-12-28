@@ -15,7 +15,25 @@
   </ng-container>
   <ng-container matColumnDef="status" >
     <mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</mat-header-cell>
-    <mat-cell *matCellDef="let round" [style.color]="round.status === 'selected' ? 'green' : 'red'" > {{round.status}} </mat-cell>
+    <mat-cell *matCellDef="let round">
+      <p [ngSwitch]="round.status" [style.color]="'white'">
+        <span *ngSwitchCase="'selected'" [style.background-color]="'green'">
+          {{round.status}}
+        </span>
+        <span *ngSwitchCase="'rejected'" [style.background-color]="'red'">
+          {{round.status}}
+        </span>
+        <span *ngSwitchCase="'cancelled'" [style.background-color]="'brown'">
+          {{round.status}}
+        </span>
+        <span *ngSwitchCase="'not_attended'" [style.background-color]="'blue'">
+          {{round.status}}
+        </span>
+        <span *ngSwitchDefault [style.background-color]="'red'">
+          {{round.status}}
+        </span>
+      </p>
+    </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
