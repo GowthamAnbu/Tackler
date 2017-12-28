@@ -19,31 +19,31 @@ const rounds = [
   {
       "id": 1,
       "level": "APPTITUDE/WRITTEN TEST",
-      "scheduled_time": "1514443872373.67 1514443872374",
+      "scheduled_time": "2017-12-18T08:04:30.615Z",
       "state": false,
   },
   {
       "id": 2,
       "level": "TECHNICAL ROUND 1",
-      "scheduled_time": "1514443913550.59 1514443913550",
-      "state": false,
+      "scheduled_time": "2017-12-20T10:38:14.223Z",
+      "state": true,
   },
   {
       "id": 3,
       "level": "TECHNICAL ROUND 2",
-      "scheduled_time": "1514443937939.42 1514443937939",
+      "scheduled_time": "2017-12-21T10:38:14.223Z",
       "state": false,
   },
   {
       "id": 4,
       "level": "MANAGER ROUND",
-      "scheduled_time": "1514443947780.945 1514443947781",
-      "state": false,
+      "scheduled_time": "2017-12-22T10:38:14.223Z",
+      "state": true,
   },
   {
       "id": 5,
       "level": "HR ROUND",
-      "scheduled_time": "1514443955119.575 1514443955119",
+      "scheduled_time": "2017-12-23T10:38:14.223Z",
       "state": false,
   }
 ];

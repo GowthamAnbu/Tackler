@@ -1,3 +1,22 @@
-<p>
-  rounds works!
-</p>
+<mat-input-container floatPlaceholder="never">
+  <input matInput #filter placeholder="Filter Rounds">
+</mat-input-container>
+<mat-table #table [dataSource]="dataSource" matSort>
+  <ng-container matColumnDef="level">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ROUND NAME</mat-header-cell>
+    <mat-cell *matCellDef="let round">{{round.level}}</mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="scheduled_time">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>SCHEDULED TIME</mat-header-cell>
+    <mat-cell *matCellDef="let round"> {{round.scheduled_time | date}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="state" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</mat-header-cell>
+    <mat-cell *matCellDef="let round" [style.color]="round.state === true ? 'green' : 'red'" > {{round.state === true ? "Active": "In Active"}} </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<div [style.display]="dataSource?.filteredData.length == 0 ? '' : 'none'">
+   No users found matching filter. use the <strong>ROUND NAME</strong> to search.
+</div>
