@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -9,7 +10,6 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { JobService } from '../../services/job.service';
 import { Ijob } from '../../interfaces/Ijob';
 
 @Component({
@@ -28,31 +28,27 @@ private _jobs: Ijob[] = [];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild('filter') filter: ElementRef;
 
-constructor(private _jobService: JobService) { }
+constructor(private _activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getJobs();
+    this.setProperties();
+  }
+
+  private setProperties() {
     this.dataSource = new DashBoardDataSource(this._jobs, this.paginator, this.sort);
     // Observable for the filter
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
-    .debounceTime(150)
-    .distinctUntilChanged()
-    .subscribe(() => {
-      if (!this.dataSource) { return; }
-      this.dataSource.filter = this.filter.nativeElement.value;
-    });
+      .debounceTime(150)
+      .distinctUntilChanged()
+      .subscribe(() => {
+        if (!this.dataSource) { return; }
+        this.dataSource.filter = this.filter.nativeElement.value;
+      });
   }
 
   private _getJobs() {
-      this._jobService.getJobs()
-      .subscribe(
-        data => {
-          this._jobs = data;
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    this._jobs = this._activateRoute.snapshot.data['jobs'];
   }
 
 }

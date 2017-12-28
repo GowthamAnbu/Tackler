@@ -7,12 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material/material.module';
 
-import { LoginComponent } from './shared/components/login/login.component';
-import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-import { AuthService } from './shared/services/auth.service';
-import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent } from './shared/components/login/login.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { JobService } from './services/job.service';
+import { JobListResolverService } from './services/job-list-resolver.service';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { JobService } from './services/job.service';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [Title, AuthService, JobService],
+  providers: [Title, AuthService, JobService, JobListResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
