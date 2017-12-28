@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: 'rounds/:id',
     component: RoundsComponent,
-    resolve: {rounds: RoundListResolverService}
+    resolve: {interviewRounds: RoundListResolverService}
   },
   {
     path: 'questions/:id',
