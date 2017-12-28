@@ -9,6 +9,7 @@ import { MaterialModule } from './material/material.module';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RoundsComponent } from './components/rounds/rounds.component';
+import { QuestionsComponent } from './components/questions/questions.component';
 import { LoginComponent } from './shared/components/login/login.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
@@ -16,8 +17,9 @@ import { JobService } from './services/job.service';
 import { JobListResolverService } from './services/job-list-resolver.service';
 import { RoundService } from './services/round.service';
 import { RoundListResolverService } from './services/round-list-resolver.service';
+import { QuestionService } from './services/question.service';
 import { AuthService } from './shared/services/auth.service';
-import { QuestionsComponent } from './components/questions/questions.component';
+import { QuestionListResolverService } from './services/question-list-resolver.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,16 @@ import { QuestionsComponent } from './components/questions/questions.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [Title, AuthService, JobService, JobListResolverService, RoundService, RoundListResolverService],
+  providers: [
+    Title,
+    AuthService,
+    JobService,
+    JobListResolverService,
+    RoundService,
+    RoundListResolverService,
+    QuestionService,
+    QuestionListResolverService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,6 +8,7 @@ import { LoginComponent } from './shared/components/login/login.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { JobListResolverService } from './services/job-list-resolver.service';
 import { RoundListResolverService } from './services/round-list-resolver.service';
+import { QuestionListResolverService } from './services/question-list-resolver.service';
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'questions/:id',
-    component: QuestionsComponent
+    component: QuestionsComponent,
+    resolve: {question: QuestionListResolverService}
   },
   {
     path: 'login',
