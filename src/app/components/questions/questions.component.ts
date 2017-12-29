@@ -12,9 +12,11 @@ import { Iquestion, Iquestions } from '../../interfaces/iquestion';
 export class QuestionsComponent implements OnInit {
 
 private _testTaken = false;
+private _postData: PostData;
 questions: Iquestion;
 liveQuestion: LiveQuestion;
 finalToggle = false;
+liveAnswer: Answer;
 
   constructor(private _activatedRoute: ActivatedRoute) { }
 
@@ -54,6 +56,7 @@ finalToggle = false;
 
   /** master Toggle controlling the liveQuestion to be viewed or not */
   toggle(index: number): void {
+    this._setLiveAnswer(index);
     index += 1;
     if (index === this.questions.questions.length) {
       this.finalToggle = true;
@@ -63,13 +66,17 @@ finalToggle = false;
     this._setLiveQuestion(index);
   }
 
+  private _setLiveAnswer(index: number) {
+    console.log('setting the live answer called by toggle', index);
+  }
+
   /** things to do before hitting the api or service call  */
   finalPreHit(): void {
-    this._postData();
+    this._serviceCall();
   }
 
   /** actual api hit or service call  */
-  private _postData(): void {
+  private _serviceCall(): void {
     console.log('post api hit');
   }
 }
@@ -77,4 +84,14 @@ finalToggle = false;
 export interface LiveQuestion {
   question: Iquestions;
   index: number;
+}
+
+export interface PostData {
+  round_id: number;
+  answers: Array<Answer>;
+}
+
+export interface Answer {
+  question_id: number;
+  answer: string;
 }
