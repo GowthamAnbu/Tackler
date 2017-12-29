@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Iquestion } from '../../interfaces/iquestion';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -8,10 +9,16 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class QuestionsComponent implements OnInit {
 
+questions: Iquestion;
+
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log(this._activatedRoute.snapshot.data['question']);
+    this._getQuestions();
   }
 
+
+  private _getQuestions() {
+    this.questions = this._activatedRoute.snapshot.data['roundQuestions'];
+  }
 }

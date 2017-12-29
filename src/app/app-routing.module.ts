@@ -24,7 +24,7 @@ const routes: Routes = [
   {
     path: 'questions/:id',
     component: QuestionsComponent,
-    resolve: {question: QuestionListResolverService}
+    resolve: {roundQuestions: QuestionListResolverService}
   },
   {
     path: 'login',

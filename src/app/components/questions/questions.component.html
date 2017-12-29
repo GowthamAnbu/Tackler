@@ -1,3 +1,4 @@
-<p>
-  questions works!
-</p>
+<div *ngIf="questions" [style.text-align]="'center'" [style.margin-top]="'10px'" >
+<p>There are <span class="text-primary bg-danger">{{questions.questions.length}}</span> questions in this section.</p>
+<p>The time alloted to complete this section is <span class="text-primary bg-danger">{{questions.duration}}</span> minutes</p>
+</div>
