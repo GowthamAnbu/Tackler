@@ -10,9 +10,8 @@ import { Iquestion, Iquestions } from '../../interfaces/iquestion';
 export class QuestionsComponent implements OnInit {
 
 private _testTaken = false;
-private _questionIndex = 1;
 questions: Iquestion;
-liveQuestion: Iquestions;
+liveQuestion: LiveQuestion;
 finalToggle = false;
 
   constructor(private _activatedRoute: ActivatedRoute) { }
@@ -32,19 +31,30 @@ finalToggle = false;
   takeTest(): void {
     this._initialHit();
     this._testTaken = !this._testTaken;
-    this.liveQuestion = this.questions.questions[0];
+    this._setLiveQuestion(0);
   }
 
   private _initialHit(): void {
     console.log('intial timer Hit');
   }
 
-  toggle(): void {
-    if (this._questionIndex === this.questions.questions.length) {
+  private _setLiveQuestion(indexValue: number) {
+    this.liveQuestion = {
+      index: indexValue,
+      question: this.questions.questions[indexValue]
+    }; console.log(this.liveQuestion);
+    /* this.liveQuestion.index = indexValue;
+    this.liveQuestion.question = this.questions.questions[indexValue]; */
+  }
+
+  toggle(index: number): void {
+    index += 1;
+    if (index === this.questions.questions.length) {
       this.finalToggle = true;
+      this.liveQuestion = undefined;
+      return;
     }
-    this.liveQuestion = this.questions.questions[this._questionIndex];
-    ++this._questionIndex;
+    this._setLiveQuestion(index);
   }
 
   finalPreHit(): void {
@@ -54,4 +64,9 @@ finalToggle = false;
   private _postData(): void {
     console.log('post api hit');
   }
+}
+
+export interface LiveQuestion {
+  question: Iquestions;
+  index: number;
 }
