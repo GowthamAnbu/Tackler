@@ -1,4 +1,66 @@
-<div *ngIf="questions" [style.text-align]="'center'" [style.margin-top]="'10px'" >
-<p>There are <span class="text-primary bg-danger">{{questions.questions.length}}</span> questions in this section.</p>
-<p>The time alloted to complete this section is <span class="text-primary bg-danger">{{questions.duration}}</span> minutes</p>
+<mat-card *ngIf="questions && !isTestTaken()" [style.text-align]="'center'" [style.margin-top]="'10px'" class="center_div">
+  <!-- <mat-card-header>
+    <mat-card-title><span [style.text-align]="'center'">Test Information</span></mat-card-title>
+  </mat-card-header> -->
+  <mat-card-content>
+    <p class="text-primary">Basic Test Information</p>
+    <p>There are <span class="text-primary bg-danger">{{questions.questions.length}}</span> questions in this section.</p>
+    <p>The time alloted to complete this section is <span class="text-primary bg-danger">{{questions.duration}}</span> minutes</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="takeTest()" class="bg" >Take Test</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card *ngIf="liveQuestion && isTestTaken();let index">
+  <mat-card-header>
+    <mat-card-title>
+      <p [ngSwitch]="liveQuestion.type" class="bg">
+        <span *ngSwitchCase="'yes_no'">
+        YES/NO
+        </span>
+        <span *ngSwitchCase="'objective'">
+        OBJECTIVE
+        </span>
+        <span *ngSwitchCase="'descriptive'">
+        DESRIPTIVE
+        </span>
+        <span *ngSwitchDefault>
+        Error
+        </span>Type Question
+      </p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    QUESTION: {{liveQuestion.content}}
+    <p [ngSwitch]="liveQuestion.type" [style.margin-top]="'25px'">
+    <span *ngSwitchCase="'yes_no'">
+      <mat-radio-group>
+        <mat-radio-button value="true">True</mat-radio-button>
+        <mat-radio-button value="false" [style.margin-left]="'10px'">False</mat-radio-button>
+      </mat-radio-group>
+    </span>
+    <span *ngSwitchCase="'objective'">
+      <div *ngFor="let option of liveQuestion.options" [style.margin-top]="'10px'">
+        <mat-radio-button value="option">{{option}}</mat-radio-button>
+      </div>
+    </span>
+    <span *ngSwitchCase="'descriptive'">
+      <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
+        <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500"></textarea>
+      </mat-form-field>
+    </span>
+    <span *ngSwitchDefault>
+    Error
+    </span>
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="toggle()" class="bg" >Submit Answer</button>
+  </mat-card-actions>
+</mat-card>
+<div *ngIf="finalToggle">
+  <p>You have successfully completed the test !</p>
+  <p>click Submit Result to submit the Answers !</p>
+  <button mat-button (click)="finalPreHit()" class="bg-green">Submit Result</button>
 </div>
