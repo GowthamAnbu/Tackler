@@ -36,18 +36,18 @@
     <p [ngSwitch]="liveQuestion?.question.type" [style.margin-top]="'25px'">
     <span *ngSwitchCase="'yes_no'">
       <mat-radio-group>
-        <mat-radio-button value="true">True</mat-radio-button>
-        <mat-radio-button value="false" [style.margin-left]="'10px'">False</mat-radio-button>
+        <mat-radio-button [value]="true" (click)="setAnswer('true')">True</mat-radio-button>
+        <mat-radio-button [value]="false" [style.margin-left]="'10px'" (click)="setAnswer('false')">False</mat-radio-button>
       </mat-radio-group>
     </span>
     <span *ngSwitchCase="'objective'">
       <div *ngFor="let option of liveQuestion?.question.options" [style.margin-top]="'10px'">
-        <mat-radio-button value="option">{{option}}</mat-radio-button>
+        <mat-radio-button [value]="option" (click)="setAnswer(option)">{{option}}</mat-radio-button>
       </div>
     </span>
     <span *ngSwitchCase="'descriptive'">
       <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
-        <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500"></textarea>
+        <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" (change)="setAnswer(descriptiveAnswer.value)" #descriptiveAnswer></textarea>
       </mat-form-field>
     </span>
     <span *ngSwitchDefault>

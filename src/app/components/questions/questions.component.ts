@@ -17,11 +17,16 @@ questions: Iquestion;
 liveQuestion: LiveQuestion;
 finalToggle = false;
 liveAnswer: Answer;
+answer: string;
 
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getQuestions();
+    this._postData = {
+      round_id: this.questions.round_id, // intialization of postData
+      answers : []
+    };
   }
 
   /** returns the initial question object  */
@@ -29,6 +34,7 @@ liveAnswer: Answer;
     this.questions = this._activatedRoute.snapshot.data['roundQuestions']; console.log(this.questions);
   }
 
+  /* Helper function for UI */
   isTestTaken(): boolean {
     return this._testTaken;
   }
@@ -42,6 +48,7 @@ liveAnswer: Answer;
     this._setLiveQuestion(0);
   }
 
+  /* timer hit after taking the test for security reasons */
   private _initialHit(): void {
     console.log('intial timer Hit');
   }
@@ -64,10 +71,29 @@ liveAnswer: Answer;
       return;
     }
     this._setLiveQuestion(index);
+    this.answer = undefined; // clear answer radiobutton cache for each question
   }
 
+  /* public function to be called by html which sets the answer string */
+  setAnswer(answer: string): void {
+    this.answer = answer;
+  }
+
+  /* sets the liveAnswer array */
   private _setLiveAnswer(index: number) {
-    console.log('setting the live answer called by toggle', index);
+    // set answer to empty string if answer is not selected
+    if (this.answer === undefined) {
+      this.answer = '';
+    }
+    this.liveAnswer = {
+      question_id: this._getQuestionId(index),
+      answer: this.answer.trim()
+    };
+    console.log(`the live answer is`, this.liveAnswer);
+  }
+
+  private _getQuestionId(index: number): number {
+    return this.questions.questions[index].question_id;
   }
 
   /** things to do before hitting the api or service call  */
