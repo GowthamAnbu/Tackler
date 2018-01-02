@@ -56,9 +56,9 @@
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button *ngIf="liveQuestion?.index > 0">previous</button>
+    <button mat-button *ngIf="liveQuestion?.index > 0" (click)="goto(liveQuestion?.index-1)">previous</button>
     <button mat-button (click)="toggle(liveQuestion?.index)" class="bg" >Answer</button>
-    <button mat-button *ngIf="liveQuestion?.index < questions.questions.length-1">next</button>
+    <button mat-button *ngIf="liveQuestion?.index < questions.questions.length-1" (click)="goto(liveQuestion?.index+1)">next</button>
   </mat-card-actions>
 </mat-card>
 <div *ngIf="finalToggle">

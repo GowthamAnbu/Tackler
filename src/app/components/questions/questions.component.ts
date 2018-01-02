@@ -18,7 +18,7 @@ liveQuestion: LiveQuestion;
 finalToggle = false;
 liveAnswer: Answer;
 answer: string;
-
+preview = false;
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -59,6 +59,14 @@ answer: string;
       index: indexValue,
       question: this.questions.questions[indexValue]
     };
+  }
+
+  goto(index: number): void {
+    const id = this._getQuestionId(index);
+    if (this._isAnswered(id)) {
+      this.preview = true;
+    }
+    this._setLiveQuestion(index);
   }
 
   /** master Toggle controlling the liveQuestion to be viewed or not */
