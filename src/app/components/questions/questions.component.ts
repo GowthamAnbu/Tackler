@@ -89,11 +89,36 @@ answer: string;
       question_id: this._getQuestionId(index),
       answer: this.answer.trim()
     };
-    console.log(`the live answer is`, this.liveAnswer);
+    this._setPostData(this.liveAnswer);
+    console.log(`postData is `, this._postData);
+    console.log(`index of liveAnswer`, this._getIndexOfCurrentAnswer(this.liveAnswer));
   }
 
+  /** gets the questionId based on the index given */
   private _getQuestionId(index: number): number {
     return this.questions.questions[index].question_id;
+  }
+
+  /* sets the final postData answers array based on the input */
+  private _setPostData(payload: Answer): void {
+    if (this._isAnswered(payload.question_id)) {
+      console.log('ALREADY ANSWERED');
+      const index = this._getIndexOfCurrentAnswer(payload);
+      this._postData.answers[index] = payload;
+    }else {
+      this._postData.answers.push(payload);
+    }
+  }
+
+  /** returns the index of the search Element otherwise -1 */
+  private _getIndexOfCurrentAnswer(searchElement: Answer): number {
+    return this._postData.answers.indexOf(searchElement);
+  }
+
+  /** returns true if question refferred by given id is already answered otherwise false */
+  private _isAnswered(id: number): boolean {
+    const filterData = this._postData.answers.filter(answer => answer.question_id === id);
+    return filterData.length !== 0 ;
   }
 
   /** things to do before hitting the api or service call  */
