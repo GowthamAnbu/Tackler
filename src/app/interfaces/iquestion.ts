@@ -9,4 +9,5 @@ export interface Iquestions {
   content: string;
   type: string;
   options: Array<string>;
+  answer: string;
 }

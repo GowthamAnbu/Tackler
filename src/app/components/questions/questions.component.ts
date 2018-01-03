@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Iquestion, Iquestions } from '../../interfaces/iquestion';
+import { Iquestion, Iquestions} from '../../interfaces/iquestion';
 
 @Component({
   selector: 'app-questions',
@@ -11,22 +11,21 @@ import { Iquestion, Iquestions } from '../../interfaces/iquestion';
 
 export class QuestionsComponent implements OnInit {
 
+
+True = 'true';
+False = 'false';
+
 private _testTaken = false;
 private _postData: PostData;
 questions: Iquestion;
 liveQuestion: LiveQuestion;
 finalToggle = false;
-liveAnswer: Answer;
 answer: string;
-preview = false;
+// preview = false;
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getQuestions();
-    this._postData = {
-      round_id: this.questions.round_id, // intialization of postData
-      answers : []
-    };
   }
 
   /** returns the initial question object  */
@@ -62,10 +61,10 @@ preview = false;
   }
 
   goto(index: number): void {
-    const id = this._getQuestionId(index);
+    /* const id = this._getQuestionId(index);
     if (this._isAnswered(id)) {
       this.preview = true;
-    }
+    } */
     this._setLiveQuestion(index);
   }
 
@@ -89,17 +88,23 @@ preview = false;
 
   /* sets the liveAnswer array */
   private _setLiveAnswer(index: number) {
+    const _questionId = this._getQuestionId(index);
     // set answer to empty string if answer is not selected
     if (this.answer === undefined) {
-      this.answer = '';
+      this.answer = this._getAnswer(_questionId);
     }
-    this.liveAnswer = {
+    /* this.liveAnswer = {
       question_id: this._getQuestionId(index),
       answer: this.answer.trim()
+    }; */
+    this._postData = {
+      round_id: this.questions.round_id,
+      question_id: _questionId,
+      answer: this.answer
     };
-    this._setPostData(this.liveAnswer);
-    console.log(`postData is `, this._postData);
-    console.log(`index of liveAnswer`, this._getIndexOfCurrentAnswer(this.liveAnswer));
+    // this._setPostData();
+    console.log(`postData is `, this._postData); console.log(`index is ${index}`);
+    // console.log(`index of liveAnswer`, this._getIndexOfCurrentAnswer(this.liveAnswer));
   }
 
   /** gets the questionId based on the index given */
@@ -107,8 +112,17 @@ preview = false;
     return this.questions.questions[index].question_id;
   }
 
+  /** gets the answer based on the question_id */
+  private _getAnswer(question_id: number): string {
+    const _answer = this.questions.questions.filter(answer => answer.question_id === question_id);
+    if (_answer.length === 0) {
+      return '';
+    }
+    return _answer[0].answer;
+  }
+
   /* sets the final postData answers array based on the input */
-  private _setPostData(payload: Answer): void {
+  /* private _setPostData(payload: Answer): void {
     if (this._isAnswered(payload.question_id)) {
       console.log('ALREADY ANSWERED');
       const index = this._getIndexOfCurrentAnswer(payload);
@@ -116,18 +130,18 @@ preview = false;
     }else {
       this._postData.answers.push(payload);
     }
-  }
+  } */
 
   /** returns the index of the search Element otherwise -1 */
-  private _getIndexOfCurrentAnswer(searchElement: Answer): number {
+  /* private _getIndexOfCurrentAnswer(searchElement: Ianswer): number {
     return this._postData.answers.indexOf(searchElement);
-  }
+  } */
 
   /** returns true if question refferred by given id is already answered otherwise false */
-  private _isAnswered(id: number): boolean {
+  /* private _isAnswered(id: number): boolean {
     const filterData = this._postData.answers.filter(answer => answer.question_id === id);
     return filterData.length !== 0 ;
-  }
+  } */
 
   /** things to do before hitting the api or service call  */
   finalPreHit(): void {
@@ -147,10 +161,6 @@ export interface LiveQuestion {
 
 export interface PostData {
   round_id: number;
-  answers: Array<Answer>;
-}
-
-export interface Answer {
   question_id: number;
   answer: string;
 }
