@@ -12,6 +12,11 @@
   </mat-card-actions>
 </mat-card>
 
+<div *ngIf="liveQuestion?.question && isTestTaken()">
+  <button mat-raised-button class="clock">{{hoursDisplay ? hoursDisplay : '00'}} : {{(minutesDisplay) && (minutesDisplay <= 59) ? minutesDisplay : '00'}} : {{(secondsDisplay) && (secondsDisplay <= 59) ? secondsDisplay : '00'}}
+  </button>
+</div>
+
 <mat-card *ngIf="liveQuestion?.question && isTestTaken();let index">
   <mat-card-header>
     <mat-card-title>
@@ -84,10 +89,11 @@
     <button mat-button *ngIf="liveQuestion?.index > 0" (click)="goto(liveQuestion?.index-1)">previous</button>
     <button mat-button (click)="toggle(liveQuestion?.index)" class="bg" >Answer</button>
     <button mat-button *ngIf="liveQuestion?.index < questions.questions.length-1" (click)="goto(liveQuestion?.index+1)">next</button>
+    <button mat-button *ngIf="liveQuestion?.index === questions.questions.length-1" (click)="finalSubmit(liveQuestion?.index)" >Final Submit</button>
   </mat-card-actions>
 </mat-card>
-<div *ngIf="finalToggle">
+<!-- <div *ngIf="finalToggle">
   <p>You have successfully completed the test !</p>
   <p>click Submit Result to submit the Answers !</p>
   <button mat-button (click)="finalPreHit()" class="bg-green">Submit Result</button>
-</div>
+</div> -->

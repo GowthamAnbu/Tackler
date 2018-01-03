@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/timer';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/takeUntil';
 
 import { Iquestion, Iquestions} from '../../interfaces/iquestion';
-
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -11,6 +15,13 @@ import { Iquestion, Iquestions} from '../../interfaces/iquestion';
 
 export class QuestionsComponent implements OnInit {
 
+private _ticks: number;
+private _initialvalue: number;
+private _counter: number;
+private _subject: Subject<any>;
+minutesDisplay: number;
+hoursDisplay: number;
+secondsDisplay: number;
 
 True = 'true';
 False = 'false';
@@ -26,6 +37,54 @@ answer: string;
 
   ngOnInit() {
     this._getQuestions();
+  }
+
+  private _setTimerProperties(): void {
+    this._ticks = 0;
+    this._initialvalue = this.questions.duration;
+    this._counter = this._initialvalue * 60;
+    this.minutesDisplay = this.hoursDisplay = this.secondsDisplay = 0;
+    this._subject = new Subject();
+  }
+
+  private _resetTimerProperties(): void {
+    this._ticks = this._initialvalue = this._counter = this.minutesDisplay = this.hoursDisplay = this.secondsDisplay = 0;
+  }
+
+  private _startTimer() {
+    this._setTimerProperties();
+    const timer = Observable.timer(1, 1000);
+    timer
+    .take(this._counter)
+    .takeUntil(this._subject)
+    .map(() => --this._counter)
+    .subscribe(t => this._timer(t));
+  }
+
+  private _timer(tick) {
+    this._ticks = tick;
+    this.hoursDisplay = this._getHours(this._ticks);
+    this.minutesDisplay = this._getMinutes(this._ticks);
+    this.secondsDisplay = this._getSeconds(this._ticks);
+    if (this._counter === 0) {
+      this._finalHit();
+    }
+  }
+
+  private _getSeconds(ticks: number) {
+    return this._padding(ticks % 60);
+  }
+
+  private _getMinutes(ticks: number) {
+    return this._padding((Math.floor(ticks / 60)) % 60);
+  }
+
+  private _getHours(ticks: number) {
+    return this._padding(Math.floor((ticks / 60) / 60));
+  }
+
+  private _padding(digit: any) {
+    return digit <= 9 ? '0' + digit : digit;
   }
 
   /** returns the initial question object  */
@@ -45,11 +104,16 @@ answer: string;
     this._initialHit();
     this._testTaken = !this._testTaken;
     this._setLiveQuestion(0);
+    this._startTimer();
   }
 
   /* timer hit after taking the test for security reasons */
   private _initialHit(): void {
     console.log('intial timer Hit');
+  }
+
+  private _finalHit(): void {
+    console.log('final timer Hit');
   }
 
   /** sets the liveQuestion based on the index given */
@@ -70,7 +134,8 @@ answer: string;
 
   /** master Toggle controlling the liveQuestion to be viewed or not */
   toggle(index: number): void {
-    this._setLiveAnswer(index);
+    const data: PostData = this._setLiveAnswer(index);
+    this._serviceCall(data);
     index += 1;
     if (index === this.questions.questions.length) {
       this.finalToggle = true;
@@ -87,7 +152,7 @@ answer: string;
   }
 
   /* sets the liveAnswer array */
-  private _setLiveAnswer(index: number) {
+  private _setLiveAnswer(index: number): PostData {
     const _questionId = this._getQuestionId(index);
     // set answer to empty string if answer is not selected
     if (this.answer === undefined) {
@@ -102,9 +167,8 @@ answer: string;
       question_id: _questionId,
       answer: this.answer
     };
-    // this._setPostData();
-    console.log(`postData is `, this._postData); console.log(`index is ${index}`);
-    // console.log(`index of liveAnswer`, this._getIndexOfCurrentAnswer(this.liveAnswer));
+    // console.log(`postData is `, this._postData); console.log(`index is ${index}`);
+    return this._postData;
   }
 
   /** gets the questionId based on the index given */
@@ -144,13 +208,17 @@ answer: string;
   } */
 
   /** things to do before hitting the api or service call  */
-  finalPreHit(): void {
-    this._serviceCall();
+  finalSubmit(index: number): void {
+    this.toggle(index);
+    this._subject.next();
+    this._resetTimerProperties();
+    // have to create that popup here
   }
 
   /** actual api hit or service call  */
-  private _serviceCall(): void {
+  private _serviceCall(payload: PostData): void {
     console.log('post api hit');
+    console.log(payload);
   }
 }
 
