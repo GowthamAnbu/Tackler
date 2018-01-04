@@ -5,8 +5,10 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/takeUntil';
+import {MatDialog} from '@angular/material';
 
 import { Iquestion, Iquestions} from '../../interfaces/iquestion';
+import { SubmitDialogComponent } from '../submit-dialog/submit-dialog.component';
 
 @Component({
   selector: 'app-questions',
@@ -30,7 +32,7 @@ private _index: number;
 questions: Iquestion;
 private _answerChanged = false;
 
-  constructor(private _activatedRoute: ActivatedRoute) { }
+  constructor(private _activatedRoute: ActivatedRoute, public dialog: MatDialog) { }
 
   ngOnInit() {
     this._getQuestions();
@@ -182,12 +184,27 @@ private _answerChanged = false;
     this._submit(index);
     this._subject.next();
     this._resetTimerProperties();
-    // have to create that popup here
   }
 
   /** actual api hit or service call  */
   private _serviceCall(payload: PostData): void {
     console.log(payload);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(SubmitDialogComponent, {
+      height: '500px',
+      width: '500px',
+      data: this._getUnansweredNoOfQuestions()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+
+  private _getUnansweredNoOfQuestions(): number {
+    return this.questions.questions.filter( answer => answer.answer === '').length;
   }
 }
 

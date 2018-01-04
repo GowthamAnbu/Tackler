@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content>
+  <p><strong> Click the confirm button to submit the result </strong></p>
+  <p><strong> Click the Cancel button to go back </strong></p>
+  <p *ngIf="data > 0">
+    Note:
+        You have {{data}} unanswered Questions
+  </p>
+</mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="onCloseTrue(true)" color="primary">Confirm</button>
+    <button mat-raised-button (click)="onCloseTrue(false)" color="primary">cancel</button>
+  </mat-card-actions>
+</mat-card>

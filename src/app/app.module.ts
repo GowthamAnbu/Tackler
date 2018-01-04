@@ -20,6 +20,7 @@ import { RoundListResolverService } from './services/round-list-resolver.service
 import { QuestionService } from './services/question.service';
 import { AuthService } from './shared/services/auth.service';
 import { QuestionListResolverService } from './services/question-list-resolver.service';
+import { SubmitDialogComponent } from './components/submit-dialog/submit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,8 +30,10 @@ import { QuestionListResolverService } from './services/question-list-resolver.s
     NavbarComponent,
     DashboardComponent,
     RoundsComponent,
-    QuestionsComponent
+    QuestionsComponent,
+    SubmitDialogComponent
   ],
+  entryComponents: [SubmitDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
