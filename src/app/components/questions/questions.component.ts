@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -75,7 +75,8 @@ private _answerChanged = false;
     this.minutesDisplay = this._getMinutes(this._ticks);
     this.secondsDisplay = this._getSeconds(this._ticks);
     if (this._counter === 0) {
-      this._finalHit();
+      this._submit(this.getIndex());  // can create a function to post all answers array :)
+      this._router.navigateByUrl('/rounds/1');
     }
   }
 
@@ -182,6 +183,10 @@ private _answerChanged = false;
   /** function called by UI to submit last answer  */
   lastSubmit(index: number): void {
     this._submit(index);
+    this._stopTimer();
+  }
+
+  private _stopTimer() {
     this._subject.next();
     this._resetTimerProperties();
   }
@@ -213,6 +218,12 @@ private _answerChanged = false;
       this._router.navigateByUrl('/rounds/1');
     }
   }
+
+  /* ngOnDestroy(): void {
+    // Called once, before the instance is destroyed.
+    // Add 'implements OnDestroy' to the class.
+    this.removeLocalTestTaken();
+  } */
 
 }
 
