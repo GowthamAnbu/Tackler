@@ -17,87 +17,6 @@
   </button>
 </div>
 
-<!-- <mat-card *ngIf="liveQuestion?.question && isTestTaken();let index">
-  <mat-card-header>
-    <mat-card-title>
-      <p [ngSwitch]="liveQuestion?.question.type" class="bg">
-        <span *ngSwitchCase="'yes_no'">
-        YES/NO
-        </span>
-        <span *ngSwitchCase="'objective'">
-        OBJECTIVE
-        </span>
-        <span *ngSwitchCase="'descriptive'">
-        DESRIPTIVE
-        </span>
-        <span *ngSwitchDefault>
-        Error
-        </span>Type Question
-      </p>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    QUESTION: {{liveQuestion?.question.content}}
-    <div *ngIf="liveQuestion?.question.answer !== '';else elseBlock" >
-      <p [ngSwitch]="liveQuestion?.question.type" [style.margin-top]="'25px'">
-      <span *ngSwitchCase="'yes_no'">
-        <mat-radio-group>
-          <mat-radio-button [value]="true" [checked]="True === liveQuestion?.question.answer" (click)="setAnswer('true')" [(ngModel)]="True" ngDefaultControl>True</mat-radio-button>
-          <mat-radio-button [value]="false" [checked]="False === liveQuestion?.question.answer" (click)="setAnswer('false')" [(ngModel)]="False" ngDefaultControl [style.margin-left]="'10px'">False</mat-radio-button>
-        </mat-radio-group>
-      </span>
-      <span *ngSwitchCase="'objective'">
-        <div *ngFor="let option of liveQuestion?.question.options" [style.margin-top]="'10px'">
-          <mat-radio-button [value]="option" [checked]="option === liveQuestion?.question.answer" (click)="setAnswer(option)">{{option}}</mat-radio-button>
-        </div>
-      </span>
-      <span *ngSwitchCase="'descriptive'">
-        <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
-          <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" [(ngModel)]="liveQuestion?.question.answer" ></textarea>
-        </mat-form-field>
-      </span>
-      <span *ngSwitchDefault>
-      Error
-      </span>
-      </p>
-    </div>
-    <ng-template #elseBlock>
-      <p [ngSwitch]="liveQuestion?.question.type" [style.margin-top]="'25px'">
-      <span *ngSwitchCase="'yes_no'">
-        <mat-radio-group>
-          <mat-radio-button [value]="true" (click)="setAnswer('true')">True</mat-radio-button>
-          <mat-radio-button [value]="false" [style.margin-left]="'10px'" (click)="setAnswer('false')">False</mat-radio-button>
-        </mat-radio-group>
-      </span>
-      <span *ngSwitchCase="'objective'">
-        <div *ngFor="let option of liveQuestion?.question.options" [style.margin-top]="'10px'">
-          <mat-radio-button [value]="option" (click)="setAnswer(option)">{{option}}</mat-radio-button>
-        </div>
-      </span>
-      <span *ngSwitchCase="'descriptive'">
-        <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
-          <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" [(ngModel)]="liveQuestion?.question.answer"></textarea>
-        </mat-form-field>
-      </span>
-      <span *ngSwitchDefault>
-      Error
-      </span>
-      </p>
-    </ng-template>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-button *ngIf="liveQuestion?.index > 0" (click)="goto(liveQuestion?.index-1)">previous</button>
-    <button mat-button (click)="toggle(liveQuestion?.index)" class="bg" >Answer</button>
-    <button mat-button *ngIf="liveQuestion?.index < questions.questions.length-1" (click)="goto(liveQuestion?.index+1)">next</button>
-    <button mat-button *ngIf="liveQuestion?.index === questions.questions.length-1" (click)="finalSubmit(liveQuestion?.index)" >Final Submit</button>
-  </mat-card-actions>
-</mat-card> -->
-<!-- <div *ngIf="finalToggle">
-  <p>You have successfully completed the test !</p>
-  <p>click Submit Result to submit the Answers !</p>
-  <button mat-button (click)="finalPreHit()" class="bg-green">Submit Result</button>
-</div> -->
-
 <div *ngIf="isTestTaken()" >
   <div *ngFor="let question of questions.questions;let i = index">
     <mat-card *ngIf="i === getIndex()">
@@ -121,7 +40,6 @@
     </mat-card-header> -->
     <mat-card-content>
       QUESTION: {{question?.content}}
-      <div *ngIf="question?.answer !== '';else elseBlock" >
         <p [ngSwitch]="question?.type" [style.margin-top]="'25px'">
         <span *ngSwitchCase="'yes_no'">
           <mat-radio-group>
@@ -136,37 +54,13 @@
         </span>
         <span *ngSwitchCase="'descriptive'">
           <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
-            <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" [(ngModel)]="question.answer" ></textarea>
+            <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" [(ngModel)]="question.answer" (ngModelChange)="setAnswer('')" ></textarea>
           </mat-form-field>
         </span>
         <span *ngSwitchDefault>
         Error
         </span>
         </p>
-      </div>
-      <ng-template #elseBlock>
-        <p [ngSwitch]="question?.type" [style.margin-top]="'25px'">
-        <span *ngSwitchCase="'yes_no'">
-          <mat-radio-group>
-            <mat-radio-button [value]="true" [checked]="question.answer === 'true'" (click)="setAnswer('true')">True</mat-radio-button>
-            <mat-radio-button [value]="false" [checked]="question.answer === 'true'" (click)="setAnswer('false')"  [style.margin-left]="'10px'">False</mat-radio-button>
-          </mat-radio-group>
-        </span>
-        <span *ngSwitchCase="'objective'">
-          <div *ngFor="let option of question?.options" [style.margin-top]="'10px'">
-            <mat-radio-button [value]="option" (click)="setAnswer(option)">{{option}}</mat-radio-button>
-          </div>
-        </span>
-        <span *ngSwitchCase="'descriptive'">
-          <mat-form-field [floatLabel]="'never'" [style.width.%]="100" >
-            <textarea matInput placeholder="Enter your Answer Here !" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="500" [(ngModel)]="question.answer"></textarea>
-          </mat-form-field>
-        </span>
-        <span *ngSwitchDefault>
-        Error
-        </span>
-        </p>
-      </ng-template>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button *ngIf="getIndex() > 0" (click)="goto(getIndex()-1)">previous</button>

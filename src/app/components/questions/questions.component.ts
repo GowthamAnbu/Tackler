@@ -28,6 +28,7 @@ private _testTaken = false;
 private _postData: PostData;
 private _index: number;
 questions: Iquestion;
+private _answerChanged = false;
 
   constructor(private _activatedRoute: ActivatedRoute) { }
 
@@ -38,6 +39,7 @@ questions: Iquestion;
 
   private _setIndex(indexValue: number) {
     this._index = indexValue;
+    this._answerChanged = false;
   }
 
   getIndex(): number {
@@ -137,19 +139,26 @@ questions: Iquestion;
 
   /** submits the answer by setting answer followed by calling the service function*/
   private _submit(index: number): void {
-    /* // doubt in this function
-    if (this.questions.questions[index] === this.questions.questions[index]) {
-      console.log('already answered');
+    if (!this._answerChanged) {
+      // console.log('already answered by clicking the radio button for id =>', this.questions.questions[index].question_id);
       return ;
-    } */
+    }
     const data: PostData = this._setPostAnswer(index);
     this._serviceCall(data);
   }
 
   /* public function to be called by UI which sets the answer string */
   setAnswer(answer: string): void {
+    // for the special guy textarea who uses ngmodel
+    if (answer === '') {
+      this._answerChanged = true;
+      return;
+    }
     const id = this.getIndex();
-    this.questions.questions[id].answer = answer;
+    if (this.questions.questions[id].answer !== answer) {
+      this._answerChanged = true;
+      this.questions.questions[id].answer = answer;
+    }
   }
 
   /* sets the PostAnswer */
