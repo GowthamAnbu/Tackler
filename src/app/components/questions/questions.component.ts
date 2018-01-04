@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/timer';
@@ -32,7 +32,7 @@ private _index: number;
 questions: Iquestion;
 private _answerChanged = false;
 
-  constructor(private _activatedRoute: ActivatedRoute, public dialog: MatDialog) { }
+  constructor(private _router: Router, private _activatedRoute: ActivatedRoute, public dialog: MatDialog) { }
 
   ngOnInit() {
     this._getQuestions();
@@ -200,12 +200,21 @@ private _answerChanged = false;
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
+      this._afterClosed(result);
     });
   }
 
   private _getUnansweredNoOfQuestions(): number {
     return this.questions.questions.filter( answer => answer.answer === '').length;
   }
+
+  private _afterClosed(result: boolean): void {
+    if (result !== undefined && result === true) {
+      this.lastSubmit(this.getIndex()); // instead of getting from UI calling directly; caused by model
+      this._router.navigateByUrl('/rounds/1');
+    }
+  }
+
 }
 
 export interface PostData {

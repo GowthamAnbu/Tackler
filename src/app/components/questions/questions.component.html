@@ -65,10 +65,8 @@
     <mat-card-actions>
       <button mat-button *ngIf="getIndex() > 0" (click)="goto(getIndex()-1)">previous</button>
       <button mat-button *ngIf="getIndex() < questions.questions.length-1" (click)="next(getIndex())">next</button>
-      <button mat-button *ngIf="getIndex() === questions.questions.length-1" (click)="lastSubmit(getIndex())" >Submit</button>
+      <button mat-button *ngIf="getIndex() === questions.questions.length-1" (click)="openDialog()" >Submit</button>
     </mat-card-actions>
   </mat-card>
   </div>
 </div>
-
-<button mat-button (click)="openDialog()" >Submit</button>
