@@ -7,6 +7,7 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/takeUntil';
 
 import { Iquestion, Iquestions} from '../../interfaces/iquestion';
+
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -23,20 +24,24 @@ minutesDisplay: number;
 hoursDisplay: number;
 secondsDisplay: number;
 
-True = 'true';
-False = 'false';
-
 private _testTaken = false;
 private _postData: PostData;
+private _index: number;
 questions: Iquestion;
-liveQuestion: LiveQuestion;
-finalToggle = false;
-answer: string;
-// preview = false;
+
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getQuestions();
+    this._index = 0;
+  }
+
+  private _setIndex(indexValue: number) {
+    this._index = indexValue;
+  }
+
+  getIndex(): number {
+    return this._index;
   }
 
   private _setTimerProperties(): void {
@@ -103,7 +108,6 @@ answer: string;
   takeTest(): void {
     this._initialHit();
     this._testTaken = !this._testTaken;
-    this._setLiveQuestion(0);
     this._startTimer();
   }
 
@@ -112,62 +116,50 @@ answer: string;
     console.log('intial timer Hit');
   }
 
+  /* final timer hit to represent end of test */
   private _finalHit(): void {
     console.log('final timer Hit');
   }
 
-  /** sets the liveQuestion based on the index given */
-  private _setLiveQuestion(indexValue: number) {
-    this.liveQuestion = {
-      index: indexValue,
-      question: this.questions.questions[indexValue]
-    };
-  }
-
+  /**
+   * sets the global index
+   * tiny little function BIG responsibility  */
   goto(index: number): void {
-    /* const id = this._getQuestionId(index);
-    if (this._isAnswered(id)) {
-      this.preview = true;
+    this._setIndex(index);
+  }
+
+  /** submits data and increase index */
+  next(index: number) {
+    this._submit(index);
+    ++index;
+    this.goto(index);
+  }
+
+  /** submits the answer by setting answer followed by calling the service function*/
+  private _submit(index: number): void {
+    /* // doubt in this function
+    if (this.questions.questions[index] === this.questions.questions[index]) {
+      console.log('already answered');
+      return ;
     } */
-    this._setLiveQuestion(index);
-  }
-
-  /** master Toggle controlling the liveQuestion to be viewed or not */
-  toggle(index: number): void {
-    const data: PostData = this._setLiveAnswer(index);
+    const data: PostData = this._setPostAnswer(index);
     this._serviceCall(data);
-    index += 1;
-    if (index === this.questions.questions.length) {
-      this.finalToggle = true;
-      this.liveQuestion = undefined;
-      return;
-    }
-    this._setLiveQuestion(index);
-    this.answer = undefined; // clear answer radiobutton cache for each question
   }
 
-  /* public function to be called by html which sets the answer string */
+  /* public function to be called by UI which sets the answer string */
   setAnswer(answer: string): void {
-    this.answer = answer;
+    const id = this.getIndex();
+    this.questions.questions[id].answer = answer;
   }
 
-  /* sets the liveAnswer array */
-  private _setLiveAnswer(index: number): PostData {
+  /* sets the PostAnswer */
+  private _setPostAnswer(index: number): PostData {
     const _questionId = this._getQuestionId(index);
-    // set answer to empty string if answer is not selected
-    if (this.answer === undefined) {
-      this.answer = this._getAnswer(_questionId);
-    }
-    /* this.liveAnswer = {
-      question_id: this._getQuestionId(index),
-      answer: this.answer.trim()
-    }; */
     this._postData = {
       round_id: this.questions.round_id,
       question_id: _questionId,
-      answer: this.answer
+      answer: this.questions.questions[index].answer
     };
-    // console.log(`postData is `, this._postData); console.log(`index is ${index}`);
     return this._postData;
   }
 
@@ -176,40 +168,9 @@ answer: string;
     return this.questions.questions[index].question_id;
   }
 
-  /** gets the answer based on the question_id */
-  private _getAnswer(question_id: number): string {
-    const _answer = this.questions.questions.filter(answer => answer.question_id === question_id);
-    if (_answer.length === 0) {
-      return '';
-    }
-    return _answer[0].answer;
-  }
-
-  /* sets the final postData answers array based on the input */
-  /* private _setPostData(payload: Answer): void {
-    if (this._isAnswered(payload.question_id)) {
-      console.log('ALREADY ANSWERED');
-      const index = this._getIndexOfCurrentAnswer(payload);
-      this._postData.answers[index] = payload;
-    }else {
-      this._postData.answers.push(payload);
-    }
-  } */
-
-  /** returns the index of the search Element otherwise -1 */
-  /* private _getIndexOfCurrentAnswer(searchElement: Ianswer): number {
-    return this._postData.answers.indexOf(searchElement);
-  } */
-
-  /** returns true if question refferred by given id is already answered otherwise false */
-  /* private _isAnswered(id: number): boolean {
-    const filterData = this._postData.answers.filter(answer => answer.question_id === id);
-    return filterData.length !== 0 ;
-  } */
-
-  /** things to do before hitting the api or service call  */
-  finalSubmit(index: number): void {
-    this.toggle(index);
+  /** function called by UI to submit last answer  */
+  lastSubmit(index: number): void {
+    this._submit(index);
     this._subject.next();
     this._resetTimerProperties();
     // have to create that popup here
@@ -217,14 +178,8 @@ answer: string;
 
   /** actual api hit or service call  */
   private _serviceCall(payload: PostData): void {
-    console.log('post api hit');
     console.log(payload);
   }
-}
-
-export interface LiveQuestion {
-  question: Iquestions;
-  index: number;
 }
 
 export interface PostData {
