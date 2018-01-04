@@ -36,7 +36,6 @@ private _answerChanged = false;
 
   ngOnInit() {
     this._getQuestions();
-    this._index = 0;
   }
 
   private _setIndex(indexValue: number) {
@@ -110,6 +109,7 @@ private _answerChanged = false;
    * initial function called by button click Take Test
    * toggles testTaken for UI */
   takeTest(): void {
+    this._setIndex(0);
     this._initialHit();
     this._testTaken = !this._testTaken;
     this._startTimer();
@@ -193,13 +193,12 @@ private _answerChanged = false;
 
   openDialog(): void {
     const dialogRef = this.dialog.open(SubmitDialogComponent, {
-      height: '500px',
+      height: '250px',
       width: '500px',
       data: this._getUnansweredNoOfQuestions()
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       this._afterClosed(result);
     });
   }
