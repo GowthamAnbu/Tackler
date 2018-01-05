@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from '@angular/material';
+import { Router } from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   private _email: FormControl;
   private _password: FormControl;
 
-  constructor(public snackBar: MatSnackBar, private _authService: AuthService) { }
+  constructor(private _router: Router, public snackBar: MatSnackBar, private _authService: AuthService) { }
 
   ngOnInit() {
     this._setProperties();
@@ -55,11 +56,16 @@ export class LoginComponent implements OnInit {
       this._authService.login(values)
       .subscribe(
         data => {
-          // redirect here
+          const auth_token: string = data.auth_token;
+          this._router.navigate(['/dashboard/', auth_token]);
           this.openSnackBar('Login Successful', 'success');
         },
         err => {
-          // console.log('in component', err);
+          if (typeof(err) === 'string') {
+            this.openSnackBar(err, 'Failed');
+          }else {
+            console.log(err);
+          }
         }
       );
     }else {
@@ -68,4 +74,5 @@ export class LoginComponent implements OnInit {
   }
 }
 
-const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+// tslint:disable-next-line:max-line-length
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

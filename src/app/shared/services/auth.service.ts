@@ -29,7 +29,6 @@ loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
   }
 
   login(payload): Observable<IcurrentUser> {
-    payload = JSON.stringify(payload); /* have to verify before posting */
     return this._http.post<IcurrentUser>( this._url, payload)
     .do((response: IcurrentUser) => {
       if (response && response.auth_token) {
@@ -59,12 +58,10 @@ loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
   }
 
   private _handleError(err: HttpErrorResponse): ErrorObservable {
-    let error: Error;
     if (err.status === 401) {
-      error = new Error('401');
-      return Observable.throw(error);
+      return Observable.throw(err.error.errors[0].detail);
     }
-    return Observable.throw(error);
+    return Observable.throw(err);
   }
 
 }

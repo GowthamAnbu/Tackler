@@ -12,7 +12,7 @@ import { QuestionListResolverService } from './services/question-list-resolver.s
 
 const routes: Routes = [
   {
-    path: 'dashboard',
+    path: 'dashboard/:auth_token',
     component: DashboardComponent,
     resolve: {jobs: JobListResolverService}
   },
