@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
-const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   hide: Boolean = true;
   floatLabel = 'always';
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   private _email: FormControl;
   private _password: FormControl;
 
-  constructor(public snackBar: MatSnackBar, private _auth: AuthService) { }
+  constructor(public snackBar: MatSnackBar, private _authService: AuthService) { }
 
   ngOnInit() {
     this._setProperties();
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
   private _setProperties() {
     this._email = new FormControl('', [
-    Validators.required,
-    Validators.pattern(EMAIL_REGEX)]
+      Validators.required,
+      Validators.pattern(EMAIL_REGEX)]
     );
     this._password = new FormControl('', [Validators.required]);
     this.login = new FormGroup({
@@ -52,9 +52,20 @@ export class LoginComponent implements OnInit {
   onSubmit(values): void {
     if (this.login.valid) {
       console.log(values);
+      this._authService.login(values)
+      .subscribe(
+        data => {
+          // redirect here
+          this.openSnackBar('Login Successful', 'success');
+        },
+        err => {
+          // console.log('in component', err);
+        }
+      );
     }else {
       this.openSnackBar('Information Correction', 'Failed');
     }
   }
 }
 
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;

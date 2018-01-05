@@ -1,5 +1,4 @@
 export interface IcurrentUser {
-  token: string;
-  firstName: string;
-  lastName: string;
+  auth_token: string;
+  full_name: string;
 }

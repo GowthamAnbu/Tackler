@@ -14,7 +14,7 @@ import { IcurrentUser } from '../../shared/models/icurrent-user';
 @Injectable()
 export class AuthService {
 
-private _url = 'http://localhost:3030/login';
+private _url = 'http://192.168.7.80:3000/api/sign-in';
 userProfile: any;
 loggedIn: boolean;
 loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
@@ -32,9 +32,8 @@ loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
     payload = JSON.stringify(payload); /* have to verify before posting */
     return this._http.post<IcurrentUser>( this._url, payload)
     .do((response: IcurrentUser) => {
-      const user = response;
-      if (user && user.token) {
-        localStorage.setItem('currentUser', JSON.stringify(user)); /* have to verify before using localstorage */
+      if (response && response.auth_token) {
+        localStorage.setItem('currentUser', JSON.stringify(response)); /* have to verify before using localstorage */
       }
     })
     .catch(this._handleError);
@@ -61,11 +60,11 @@ loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
 
   private _handleError(err: HttpErrorResponse): ErrorObservable {
     let error: Error;
-    if (err.status === 400) {
-      error = new Error('400');
+    if (err.status === 401) {
+      error = new Error('401');
+      return Observable.throw(error);
     }
-    console.log(err.message);
-    return Observable.throw(error.message);
+    return Observable.throw(error);
   }
 
 }
