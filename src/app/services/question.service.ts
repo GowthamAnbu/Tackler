@@ -18,6 +18,9 @@ export class QuestionService {
 const questions = {
   "round_id": 12,
   "duration": 120,
+  "start_time":"2018-01-04 11:46:15",
+  "end_time": "2018-01-04 12:46:15",
+  "current_time": "2018-01-04 12:45:15",
   "questions": [
   {
       "question_id": 1,

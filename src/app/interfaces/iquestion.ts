@@ -1,6 +1,9 @@
 export interface Iquestion {
   round_id: number;
   duration: number;
+  start_time: string;
+  end_time: string;
+  current_time: string;
   questions: Array<Iquestions>;
 }
 

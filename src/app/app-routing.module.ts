@@ -23,8 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'questions/:id',
-    component: QuestionsComponent,
-    resolve: {roundQuestions: QuestionListResolverService}
+    component: QuestionsComponent/* ,
+    resolve: {roundQuestions: QuestionListResolverService} */
   },
   {
     path: 'login',
