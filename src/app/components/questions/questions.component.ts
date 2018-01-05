@@ -74,7 +74,6 @@ private _answerChanged = false;
   }
 
   private _resetTimerProperties(): void {
-    // have to reset intial value and counter
     this._ticks = this._counter = this.minutesDisplay = this.hoursDisplay = this.secondsDisplay = 0;
   }
 
@@ -113,6 +112,7 @@ private _answerChanged = false;
     this._submit(this.getIndex()); // can create a function to post all answers array :)
     this._finalHit();
     this._stopTimer();
+    this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
     this._router.navigateByUrl('/rounds/1');
   }
 
@@ -153,9 +153,7 @@ private _answerChanged = false;
     return this.questions.start_time !== '';
   }
 
-  /**
-   * initial function called by button click Take Test
-   * toggles testTaken for UI */
+  /** initial function called by button click Take Test */
   // couldn't test it right now because of dynamic changes
   takeTest(): void {
     this._setIndex(0);
@@ -236,6 +234,10 @@ private _answerChanged = false;
   /** actual api hit or service call  */
   private _serviceCall(payload: PostData): void {
     console.log(payload);
+  }
+
+  private _closeDialog(): void {
+    this.dialog.closeAll();
   }
 
   openDialog(): void {
