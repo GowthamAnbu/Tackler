@@ -9,8 +9,14 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { JobListResolverService } from './services/job-list-resolver.service';
 import { RoundListResolverService } from './services/round-list-resolver.service';
 import { QuestionListResolverService } from './services/question-list-resolver.service';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
   {
     path: 'dashboard/:auth_token',
     component: DashboardComponent,
@@ -25,10 +31,6 @@ const routes: Routes = [
     path: 'questions/:id',
     component: QuestionsComponent/* ,
     resolve: {roundQuestions: QuestionListResolverService} */
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: '',

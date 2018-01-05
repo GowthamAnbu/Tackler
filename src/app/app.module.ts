@@ -21,6 +21,7 @@ import { QuestionService } from './services/question.service';
 import { AuthService } from './shared/services/auth.service';
 import { QuestionListResolverService } from './services/question-list-resolver.service';
 import { SubmitDialogComponent } from './components/submit-dialog/submit-dialog.component';
+import { LoginGuard } from './guards/login.guard';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SubmitDialogComponent } from './components/submit-dialog/submit-dialog.
     RoundService,
     RoundListResolverService,
     QuestionService,
-    QuestionListResolverService
+    QuestionListResolverService,
+    LoginGuard
   ],
   bootstrap: [AppComponent]
 })
