@@ -48,7 +48,7 @@ constructor(private _activateRoute: ActivatedRoute) { }
   }
 
   private _getJobs() {
-    this._jobs = this._activateRoute.snapshot.data['jobs'];
+    this._jobs = this._activateRoute.snapshot.data['jobs'].interviews;
   }
 
 }
@@ -80,7 +80,7 @@ export class DashBoardDataSource extends DataSource<any> {
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
       this.filteredData = this._jobsDatabase.filter((job: Ijob) => {
-        const searchStr = (job.title).toLowerCase();
+        const searchStr = (job.job.title).toLowerCase();
         return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
       });
 
@@ -106,9 +106,9 @@ export class DashBoardDataSource extends DataSource<any> {
 
       switch (this._sort.active) {
         case 'id': [propertyA, propertyB] = [a.id, b.id]; break;
-        case 'title': [propertyA, propertyB] = [a.title, b.title]; break;
-        case 'experience': [propertyA, propertyB] = [a.experience, b.experience]; break;
-        case 'no_of_vacancies': [propertyA, propertyB] = [a.no_of_vacancies, b.no_of_vacancies]; break;
+        case 'title': [propertyA, propertyB] = [a.job.title, b.job.title]; break;
+        case 'experience': [propertyA, propertyB] = [a.job.experience, b.job.experience]; break;
+        case 'no_of_vacancies': [propertyA, propertyB] = [a.job.no_of_vacancies, b.job.no_of_vacancies]; break;
       }
 
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

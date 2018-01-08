@@ -4,24 +4,24 @@
 <mat-table #table [dataSource]="dataSource" matSort>
   <ng-container matColumnDef="title">
     <mat-header-cell *matHeaderCellDef mat-sort-header>JOB TITLE</mat-header-cell>
-    <mat-cell *matCellDef="let job"><a [routerLink]="['/rounds',job.id]">{{job.title}}</a></mat-cell>
+    <mat-cell *matCellDef="let item"><a [routerLink]="['/rounds',item.id]">{{item.job.title}}</a></mat-cell>
   </ng-container>
   <ng-container matColumnDef="description">
     <mat-header-cell *matHeaderCellDef>DESCRIPTION</mat-header-cell>
-    <mat-cell *matCellDef="let job"> {{job.description}} </mat-cell>
+    <mat-cell *matCellDef="let item"> {{item.job.description}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="experience" >
     <mat-header-cell *matHeaderCellDef mat-sort-header>EXPERIENCE</mat-header-cell>
-    <mat-cell *matCellDef="let job"> {{job.experience}} </mat-cell>
+    <mat-cell *matCellDef="let item"> {{item.job.experience}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="no_of_vacancies" >
     <mat-header-cell *matHeaderCellDef mat-sort-header>VACANCIES</mat-header-cell>
-    <mat-cell *matCellDef="let job"> {{job.no_of_vacancies}} </mat-cell>
+    <mat-cell *matCellDef="let item"> {{item.job.no_of_vacancies}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="skills">
     <mat-header-cell *matHeaderCellDef>SKILLS</mat-header-cell>
-    <mat-cell *matCellDef="let job">
-        {{job.skills}}
+    <mat-cell *matCellDef="let item">
+        {{item.job.skill_names}}
     </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

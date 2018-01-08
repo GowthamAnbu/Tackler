@@ -1,8 +1,14 @@
 export interface Ijob {
   id: number;
+  state: string;
+  job: Job;
+}
+
+export class Job {
   title: string;
   description: string;
-  experience: number;
+  experience: string;
   no_of_vacancies: number;
-  skills: Array<string>;
+  referral_code: string;
+  skill_names: Array<string>;
 }
