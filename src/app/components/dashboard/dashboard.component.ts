@@ -28,10 +28,11 @@ private _jobs: Ijob[] = [];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild('filter') filter: ElementRef;
 
-constructor(private _activateRoute: ActivatedRoute) { }
+constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getJobs();
+    this._activatedRoute.snapshot.paramMap.get('auth_token');
     this.setProperties();
   }
 
@@ -48,7 +49,7 @@ constructor(private _activateRoute: ActivatedRoute) { }
   }
 
   private _getJobs() {
-    this._jobs = this._activateRoute.snapshot.data['jobs'].interviews;
+    this._jobs = this._activatedRoute.snapshot.data['jobs'].interviews;
   }
 
 }

@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { JobService } from './job.service';
 import { Ijob } from '../interfaces/ijob';
 
 @Injectable()
-export class JobListResolverService implements Resolve<Ijob[]> {
+export class JobListResolverService implements Resolve<any> {
 
   constructor(private _jobService: JobService) { }
 
-  resolve(): Observable<Ijob[]> {
-    return this._jobService.getJobs();
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<any> {
+    return this._jobService.getJobs(activatedRouteSnapshot.paramMap.get('auth_token'))
+    .catch(this._handleError);
+  }
+
+  private _handleError(err) {
+    return Observable.throw(err);
   }
 }
