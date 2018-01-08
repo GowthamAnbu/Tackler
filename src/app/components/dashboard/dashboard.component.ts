@@ -32,7 +32,6 @@ constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this._getJobs();
-    this._activatedRoute.snapshot.paramMap.get('auth_token');
     this.setProperties();
   }
 

@@ -1,52 +1,35 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/of';
 
 import { Iround } from '../interfaces/iround';
+import { AuthService } from '../shared/services/auth.service';
 
 @Injectable()
 export class RoundService {
+private _url = '';
 
-  constructor() { }
+  constructor(private _http: HttpClient, private _authService: AuthService) { }
 
-  getRounds(id: number): Observable<Iround> {
-    return Observable.of(rounds);
+  private _getRoundsUrl(id: string, auth_token: string): string {
+    let url = 'http://192.168.7.80:3000/api/interviews/';
+    url += '' + id + '' + '/interview_rounds?auth_token=' + '' + auth_token;
+    return url;
+  }
+
+  getRounds(id: string): Observable<Iround> {
+    this._url = this._getRoundsUrl(id, this._authService.userProfile.auth_token);
+    return this._http.get(this._url)
+    .catch(this._handleError);
+  }
+
+  private _handleError(err: HttpErrorResponse): ErrorObservable {
+    if (err.status === 401) {
+      return Observable.throw(err.error.errors[0].detail);
+    }
+    return Observable.throw(err);
   }
 
 }
-
-const rounds = {
-  "interview_id": 123,
-  "rounds": [
-              {
-                  "id": 1,
-                  "level": "APPTITUDE/WRITTEN TEST",
-                  "scheduled_time": "2017-12-18T08:04:30.615Z",
-                  "status": "selected",
-              },
-              {
-                  "id": 2,
-                  "level": "TECHNICAL ROUND 1",
-                  "scheduled_time": "2017-12-20T10:38:14.223Z",
-                  "status": "not_attended",
-              },
-              {
-                  "id": 3,
-                  "level": "TECHNICAL ROUND 2",
-                  "scheduled_time": "2017-12-21T10:38:14.223Z",
-                  "status": "cancelled",
-              },
-              {
-                  "id": 4,
-                  "level": "MANAGER ROUND",
-                  "scheduled_time": "2017-12-22T10:38:14.223Z",
-                  "status": "rejected",
-              },
-              {
-                  "id": 5,
-                  "level": "HR ROUND",
-                  "scheduled_time": "2017-12-23T10:38:14.223Z",
-                  "status": "cancelled",
-              }
-            ]
-};

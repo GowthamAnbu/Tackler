@@ -10,7 +10,7 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import { Irounds } from '../../interfaces/iround';
+import { Iround } from '../../interfaces/iround';
 
 @Component({
   selector: 'app-rounds',
@@ -20,9 +20,9 @@ import { Irounds } from '../../interfaces/iround';
 
 export class RoundsComponent implements OnInit {
 
-  displayedColumns: Array<string> = ['level', 'scheduled_time', 'status'];
+  displayedColumns: Array<string> = ['level', /*  'scheduled_time', */ 'status'];
   dataSource: RoundDataSource | null;
-  private _rounds: Irounds[] = [];
+  private _rounds: Iround[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filter') filter: ElementRef;
@@ -47,7 +47,7 @@ export class RoundsComponent implements OnInit {
   }
 
   private _getJobs() {
-    this._rounds = this._activatedRoute.snapshot.data['interviewRounds'].rounds;
+    this._rounds = this._activatedRoute.snapshot.data['interviewRounds'].interview_rounds;
   }
 
 }
@@ -58,14 +58,14 @@ export class RoundDataSource extends DataSource<any> {
   get filter(): string { return this._filterChange.value; }
   set filter(filter: string) { this._filterChange.next(filter); }
 
-  filteredData: Irounds[] = [];
+  filteredData: Iround[] = [];
 
-  constructor(private _roundsDatabase: Irounds[], private _sort: MatSort) {
+  constructor(private _roundsDatabase: Iround[], private _sort: MatSort) {
     super();
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Irounds[]> {
+  connect(): Observable<Iround[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       Observable.of(this._roundsDatabase),
@@ -75,8 +75,8 @@ export class RoundDataSource extends DataSource<any> {
 
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
-      this.filteredData = this._roundsDatabase.filter((round: Irounds) => {
-        const searchStr = (round.level).toLowerCase();
+      this.filteredData = this._roundsDatabase.filter((round: Iround) => {
+        const searchStr = (round.interview_level.name).toLowerCase();
         return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
       });
 
@@ -90,7 +90,7 @@ export class RoundDataSource extends DataSource<any> {
   disconnect() {}
 
     /** Returns a sorted copy of the database data. */
-    sortData(data: Irounds[]): Irounds[] {
+    sortData(data: Iround[]): Iround[] {
       if (!this._sort.active || this._sort.direction === '') { return data; }
 
       return data.sort((a, b) => {
@@ -98,8 +98,8 @@ export class RoundDataSource extends DataSource<any> {
         let propertyB: number | string | boolean = '';
 
         switch (this._sort.active) {
-          case 'level': [propertyA, propertyB] = [a.level, b.level]; break;
-          case 'scheduled_time': [propertyA, propertyB] = [a.scheduled_time, b.scheduled_time]; break;
+          case 'level': [propertyA, propertyB] = [a.interview_level.name, b.interview_level.name]; break;
+          // case 'scheduled_time': [propertyA, propertyB] = [a.scheduled_time, b.scheduled_time]; break;
           case 'status': [propertyA, propertyB] = [a.status, b.status]; break;
         }
 
