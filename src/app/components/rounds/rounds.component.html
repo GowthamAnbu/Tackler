@@ -5,8 +5,8 @@
   <ng-container matColumnDef="level">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ROUND NAME</mat-header-cell>
     <mat-cell *matCellDef="let item">
-        <a [routerLink]="['/questions',item.id]" *ngIf="item.status === 'selected';else elseBlock" >{{item.interview_level.name}}</a>
-        <ng-template #elseBlock>{{item.interview_level.name}}</ng-template>
+        <a [routerLink]="['/questions',interviewId,item.id]" *ngIf="item.status === 'Yet to start';else elseBlock" >{{item.interview_level.name}}</a>
+        <ng-template #elseBlock>{{item.interview_level.name}} {{item.status}} </ng-template>
     </mat-cell>
   </ng-container>
   <!-- <ng-container matColumnDef="scheduled_time">
@@ -17,16 +17,22 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</mat-header-cell>
     <mat-cell *matCellDef="let item">
       <p [ngSwitch]="item.status" [style.color]="'white'">
-        <span *ngSwitchCase="'selected'" [style.background-color]="'green'">
+          <span *ngSwitchCase="'Yet to start'" [style.background-color]="'black'">
+            {{item.status}}
+          </span>
+        <span *ngSwitchCase="'Selected'" [style.background-color]="'green'">
           {{item.status}}
         </span>
-        <span *ngSwitchCase="'rejected'" [style.background-color]="'red'">
+        <span *ngSwitchCase="'Rejected'" [style.background-color]="'red'">
           {{item.status}}
         </span>
-        <span *ngSwitchCase="'cancelled'" [style.background-color]="'brown'">
+        <span *ngSwitchCase="'Cancelled'" [style.background-color]="'blue'">
           {{item.status}}
         </span>
-        <span *ngSwitchCase="'not_attended'" [style.background-color]="'blue'">
+        <span *ngSwitchCase="'Not attended'" [style.background-color]="'grey'">
+          {{item.status}}
+        </span>
+        <span *ngSwitchCase="'On Hold'" [style.background-color]="'brown'">
           {{item.status}}
         </span>
         <span *ngSwitchDefault [style.background-color]="'red'">

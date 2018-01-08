@@ -23,6 +23,7 @@ export class RoundsComponent implements OnInit {
   displayedColumns: Array<string> = ['level', /*  'scheduled_time', */ 'status'];
   dataSource: RoundDataSource | null;
   private _rounds: Iround[] = [];
+  interviewId: string;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filter') filter: ElementRef;
@@ -31,6 +32,7 @@ export class RoundsComponent implements OnInit {
 
   ngOnInit() {
     this._getJobs();
+    this.interviewId = this._activatedRoute.snapshot.paramMap.get('id');
     this.setProperties();
   }
 

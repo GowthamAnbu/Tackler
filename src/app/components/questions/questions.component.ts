@@ -135,7 +135,7 @@ private _answerChanged = false;
   /* returns the initial question object => changed the data to be obtained from service since this page reloads on every */
   private _getQuestions() {
     // this.questions = this._activatedRoute.snapshot.data['roundQuestions']; console.log(this.questions);
-    this._questionService.getQuestions(+this._activatedRoute.snapshot.paramMap.get('id'))
+    this._questionService.getQuestions(+this._activatedRoute.snapshot.paramMap.get('round_id'))
     .subscribe(
       data => {
         this.questions = data;

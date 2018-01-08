@@ -31,7 +31,7 @@ const routes: Routes = [
     resolve: {interviewRounds: RoundListResolverService}
   },
   {
-    path: 'questions/:id',
+    path: 'questions/:interview_id/:round_id',
     component: QuestionsComponent,
     canActivate: [AuthGuard]/*,
     resolve: {roundQuestions: QuestionListResolverService} */
