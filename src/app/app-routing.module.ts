@@ -10,6 +10,7 @@ import { JobListResolverService } from './services/job-list-resolver.service';
 import { RoundListResolverService } from './services/round-list-resolver.service';
 import { QuestionListResolverService } from './services/question-list-resolver.service';
 import { LoginGuard } from './guards/login.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -20,16 +21,19 @@ const routes: Routes = [
   {
     path: 'dashboard/:auth_token',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     resolve: {jobs: JobListResolverService}
   },
   {
     path: 'rounds/:id',
     component: RoundsComponent,
+    canActivate: [AuthGuard],
     resolve: {interviewRounds: RoundListResolverService}
   },
   {
     path: 'questions/:id',
-    component: QuestionsComponent/* ,
+    component: QuestionsComponent ,
+    canActivate: [AuthGuard]/*,
     resolve: {roundQuestions: QuestionListResolverService} */
   },
   {
