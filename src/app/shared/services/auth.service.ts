@@ -33,6 +33,8 @@ loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
     .do((response: IcurrentUser) => {
       if (response && response.auth_token) {
         localStorage.setItem('currentUser', JSON.stringify(response)); /* have to verify before using localstorage */
+        this._setLoggedIn(true);
+        this.userProfile = this._getCurrentUser();
       }
     })
     .catch(this._handleError);

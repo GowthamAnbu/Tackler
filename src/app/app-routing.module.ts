@@ -32,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: 'questions/:id',
-    component: QuestionsComponent ,
+    component: QuestionsComponent,
     canActivate: [AuthGuard]/*,
     resolve: {roundQuestions: QuestionListResolverService} */
   },
