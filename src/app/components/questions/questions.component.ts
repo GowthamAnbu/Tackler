@@ -250,6 +250,12 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
   /** actual api hit or service call  */
   private _serviceCall(payload: PostData): void {
     console.log(payload);
+    this._questionService.submitAnswer(
+      this._activatedRoute.snapshot.paramMap.get('interview_id'),
+      payload.round_id.toString(),
+      payload.question_id.toString(),
+      payload.answer
+    ).subscribe();
   }
 
   private _closeDialog(): void {

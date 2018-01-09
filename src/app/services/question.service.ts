@@ -62,31 +62,20 @@ constructor(private _http: HttpClient, private _authService: AuthService) { }
 
   private _getAnswerUrl(interviewId: string,
     interviewRoundId: string,
-    auth_token: string,
-    interviewQuestionId: string,
-    answer: string): string {
-    /* let url = 'http://192.168.7.80:3000/api/interviews/';
+    interviewQuestionId: string): string {
+    let url = `http://192.168.7.80:3000/api/interviews/`;
     url += '' + interviewId + '' + '/interview_rounds/' + ''
-      + interviewRoundId + '' + '/interview_questions/' + ''
-      + interviewQuestionId + '?auth_token=' + '' + auth_token + ''
-      + '&' + 'answer' + '=' + answer;
-    console.log('_getAnswerUrl is: ' + url); */
-    const url = `http://192.168.7.80:3000/api/interviews/
-      :interview_id/interview_rounds/:interview_round_id/interview_questions/
-      :interview_question_id/interview_questions/:interview_question_id`;
+    + interviewRoundId + '' + '/interview_questions/' + interviewQuestionId;
     console.log('_getAnswerUrl is: ' + url);
     return url;
   }
 
-  submitAnswer(interviewId: string, interviewRoundId: string, interviewQuestionId: string, answer: string): void {
-    this._url = this._getAnswerUrl(interviewId, interviewRoundId, this._authService.userProfile.auth_token, interviewQuestionId, answer);
+  submitAnswer(interviewId: string, interviewRoundId: string, interviewQuestionId: string, answer: string): Observable<void> {
+    this._url = this._getAnswerUrl(interviewId, interviewRoundId, interviewQuestionId);
     let params = new HttpParams();
     params = params.append('auth_token', this._authService.userProfile.auth_token);
-    params = params.append('end_at', 'true');
-    this._http.put(this._url,
-      {interview_id: interviewId, interview_round_id: interviewRoundId, interview_question_id: interviewQuestionId},
-      {params}
-    )
+    params = params.append('answer', answer);
+    return this._http.put(this._url, params)
     .do(
       data => console.log('inside submitAnswer: ' + data)
     )
