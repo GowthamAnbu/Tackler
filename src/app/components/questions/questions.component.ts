@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/takeUntil';
 import { MatDialog, MatSnackBar} from '@angular/material';
 
-import { Iquestion, Iquestions} from '../../interfaces/iquestion';
+import { InterviewRound} from '../../interfaces/interview-round';
 import { SubmitDialogComponent } from '../submit-dialog/submit-dialog.component';
 import { QuestionService } from '../../services/question.service';
 
@@ -28,8 +29,9 @@ secondsDisplay: number;
 
 private _postData: PostData;
 private _index: number;
-questions: Iquestion;
+interviewRound: InterviewRound;
 private _answerChanged = false;
+toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
 
   constructor(private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -39,15 +41,16 @@ private _answerChanged = false;
 
   ngOnInit() {
     this._getQuestions();
-    if (this.isTestTaken()) {
+    // console.log(this.toggle.getValue());
+    if (this.toggle.getValue() === true) {
       this._refresh();
-  }
+    }
   }
 
   private _refresh() {
     this._getQuestions();
     this._setIndex(0);
-    this._startTimer(this.questions.current_time, this.questions.end_time);
+    this._startTimer(this.interviewRound.current_time, this.interviewRound.end_time);
   }
 
   private _setIndex(indexValue: number) {
@@ -134,24 +137,30 @@ private _answerChanged = false;
 
   /* returns the initial question object => changed the data to be obtained from service since this page reloads on every */
   private _getQuestions() {
-    // this.questions = this._activatedRoute.snapshot.data['roundQuestions']; console.log(this.questions);
-    this._questionService.getQuestions(+this._activatedRoute.snapshot.paramMap.get('round_id'))
+    // this.interviewRound = this._activatedRoute.snapshot.data['roundQuestions']; console.log(this.interviewRound);
+    this._questionService.getQuestions(
+      this._activatedRoute.snapshot.paramMap.get('round_id'),
+      this._activatedRoute.snapshot.paramMap.get('interview_id'))
     .subscribe(
       data => {
-        this.questions = data;
-        console.log(this.questions);
+        this.interviewRound = data['interview_round'];
+        // console.log(this.interviewRound);
       },
       err => {
-        this.questions = undefined;
+        this.interviewRound = undefined;
         console.log('err'); // have to do something here
       }
     );
   }
 
+  isToggled(): Observable<boolean> {
+    return this.toggle.asObservable();
+   }
+
   /* Helper function for UI */
-  isTestTaken(): boolean {
-    return this.questions.start_time !== '';
-  }
+  /* isTestTaken(): boolean {
+    return this.interviewRound.start_time !== '';
+  } */
 
   /** initial function called by button click Take Test */
   // couldn't test it right now because of dynamic changes
@@ -159,17 +168,24 @@ private _answerChanged = false;
     this._setIndex(0);
     this._initialHit();
     this._getQuestions();
-    this._startTimer(this.questions.start_time, this.questions.end_time);
+    this._startTimer(this.interviewRound.start_time, this.interviewRound.end_time);
+    this.toggle.next(true);
   }
 
   /* timer hit after taking the test for security reasons */
   private _initialHit(): void {
-    console.log('intial timer Hit'); // sets the timer here
+    this._questionService.startInterview(
+      this._activatedRoute.snapshot.paramMap.get('round_id'),
+      this._activatedRoute.snapshot.paramMap.get('interview_id'))
+      .subscribe();
   }
 
   /* final timer hit to represent end of test */
   private _finalHit(): void {
-    console.log('final timer Hit');
+    this._questionService.completeInterview(
+      this._activatedRoute.snapshot.paramMap.get('round_id'),
+      this._activatedRoute.snapshot.paramMap.get('interview_id'))
+      .subscribe();
   }
 
   /**
@@ -189,7 +205,7 @@ private _answerChanged = false;
   /** submits the answer by setting answer followed by calling the service function*/
   private _submit(index: number): void {
     if (!this._answerChanged) {
-      // console.log('already answered by clicking the radio button for id =>', this.questions.questions[index].question_id);
+      // console.log('already answered by clicking the radio button for id =>', this.interviewRound.interviewRound[index].question_id);
       return ;
     }
     const data: PostData = this._setPostAnswer(index);
@@ -204,9 +220,9 @@ private _answerChanged = false;
       return;
     }
     const id = this.getIndex();
-    if (this.questions.questions[id].answer !== answer) {
+    if (this.interviewRound.interview_questions[id].answer !== answer) {
       this._answerChanged = true;
-      this.questions.questions[id].answer = answer;
+      this.interviewRound.interview_questions[id].answer = answer;
     }
   }
 
@@ -214,16 +230,16 @@ private _answerChanged = false;
   private _setPostAnswer(index: number): PostData {
     const _questionId = this._getQuestionId(index);
     this._postData = {
-      round_id: this.questions.round_id,
+      round_id: this.interviewRound.id,
       question_id: _questionId,
-      answer: this.questions.questions[index].answer
+      answer: this.interviewRound.interview_questions[index].answer
     };
     return this._postData;
   }
 
   /** gets the questionId based on the index given */
   private _getQuestionId(index: number): number {
-    return this.questions.questions[index].question_id;
+    return this.interviewRound.interview_questions[index].id;
   }
 
   private _stopTimer() {
@@ -253,7 +269,7 @@ private _answerChanged = false;
   }
 
   private _getUnansweredNoOfQuestions(): number {
-    return this.questions.questions.filter( answer => answer.answer === '').length;
+    return this.interviewRound.interview_questions.filter( answer => answer.answer === '').length;
   }
 
   private _afterClosed(result: boolean): void {

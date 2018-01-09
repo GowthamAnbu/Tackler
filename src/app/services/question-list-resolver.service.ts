@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRoute } from '@angular/router';
+import { Resolve, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { QuestionService } from '../services/question.service';
-import { Iquestion } from '../interfaces/iquestion';
+import { InterviewRound } from '../interfaces/interview-round';
 
 @Injectable()
-export class QuestionListResolverService implements Resolve<Iquestion> {
+export class QuestionListResolverService implements Resolve<InterviewRound> {
 
   constructor(private _questionService: QuestionService, private _activatedRoute: ActivatedRoute) { }
 
-  resolve(): Observable<Iquestion> {
-    return this._questionService.getQuestions(+this._activatedRoute.snapshot.paramMap.get('id'));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<InterviewRound> {
+    return this._questionService.getQuestions(
+      activatedRouteSnapshot.paramMap.get('round_id'),
+      activatedRouteSnapshot.paramMap.get('interview_id'));
   }
 
 }

@@ -1,130 +1,104 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/of';
 
-import { Iquestion } from '../interfaces/iquestion';
+import { InterviewRound } from '../interfaces/interview-round';
+import { AuthService } from '../shared/services/auth.service';
 
 @Injectable()
 export class QuestionService {
+private _url = '';
 
-  constructor() { }
+constructor(private _http: HttpClient, private _authService: AuthService) { }
 
-  getQuestions(id: number): Observable<Iquestion> {
-    return Observable.of(questions);
+  private _getQuestionsUrl(interviewId: string, interviewRoundId: string, auth_token: string): string {
+    let url = 'http://192.168.7.80:3000/api/interviews/';
+    url += '' + interviewId + '' + '/interview_rounds/' + ''
+    + interviewRoundId + '?auth_token=' + '' + auth_token;
+    return url;
+  }
+
+  getQuestions(interviewId: string, interviewRoundId: string): Observable<InterviewRound> {
+    this._url = this._getQuestionsUrl(interviewId, interviewRoundId, this._authService.userProfile.auth_token);
+    return this._http.get(this._url)
+    .catch(this._handleError);
+  }
+
+  private _getTimerUrl(interviewId: string, interviewRoundId: string): string {
+    let url = 'http://192.168.7.80:3000/api/interviews/';
+    url += '' + interviewId + '' + '/interview_rounds/' + ''
+    + interviewRoundId;
+    console.log('_getTimerUrl is: ' + url);
+    return url;
+  }
+
+  startInterview(interviewId: string, interviewRoundId: string): Observable<void> {
+    this._url = this._getTimerUrl(interviewId, interviewRoundId);
+    let params = new HttpParams();
+    params = params.append('auth_token', this._authService.userProfile.auth_token);
+    params = params.append('start_at', 'true');
+    console.log('initial timer Hit');
+    return this._http.put(this._url, params )
+    .do(
+      data => console.log('inside startInterview: ' + data)
+    )
+    .catch(this._handleError);
+  }
+
+  completeInterview(interviewId: string, interviewRoundId: string): Observable<void> {
+    this._url = this._getTimerUrl(interviewId, interviewRoundId);
+    let params = new HttpParams();
+    params = params.append('auth_token', this._authService.userProfile.auth_token);
+    params = params.append('end_at', 'true');
+    console.log('final timer Hit');
+    return this._http.put(this._url, params )
+    .do(
+      data => console.log('inside completeInterview: ' + data)
+    )
+    .catch(this._handleError);
+  }
+
+  private _getAnswerUrl(interviewId: string,
+    interviewRoundId: string,
+    auth_token: string,
+    interviewQuestionId: string,
+    answer: string): string {
+    /* let url = 'http://192.168.7.80:3000/api/interviews/';
+    url += '' + interviewId + '' + '/interview_rounds/' + ''
+      + interviewRoundId + '' + '/interview_questions/' + ''
+      + interviewQuestionId + '?auth_token=' + '' + auth_token + ''
+      + '&' + 'answer' + '=' + answer;
+    console.log('_getAnswerUrl is: ' + url); */
+    const url = `http://192.168.7.80:3000/api/interviews/
+      :interview_id/interview_rounds/:interview_round_id/interview_questions/
+      :interview_question_id/interview_questions/:interview_question_id`;
+    console.log('_getAnswerUrl is: ' + url);
+    return url;
+  }
+
+  submitAnswer(interviewId: string, interviewRoundId: string, interviewQuestionId: string, answer: string): void {
+    this._url = this._getAnswerUrl(interviewId, interviewRoundId, this._authService.userProfile.auth_token, interviewQuestionId, answer);
+    let params = new HttpParams();
+    params = params.append('auth_token', this._authService.userProfile.auth_token);
+    params = params.append('end_at', 'true');
+    this._http.put(this._url,
+      {interview_id: interviewId, interview_round_id: interviewRoundId, interview_question_id: interviewQuestionId},
+      {params}
+    )
+    .do(
+      data => console.log('inside submitAnswer: ' + data)
+    )
+    .catch(this._handleError);
+  }
+
+  private _handleError(err: HttpErrorResponse): ErrorObservable {
+    console.log('err in question service');
+    if (err.status === 401) {
+      return Observable.throw(err);
+    }
+    return Observable.throw(err);
   }
 
 }
-
-const questions = {
-  "round_id": 12,
-  "duration": 120,
-  "start_time":"2018-01-04 11:46:15",
-  "end_time": "2018-01-04 12:46:15",
-  "current_time": "2018-01-04 12:45:15",
-  "questions": [
-  {
-      "question_id": 1,
-      "content": "is that true ?",
-      "type": "yes_no",
-      "options": [""],
-      "answer": "false"
-  },
-  {
-      "question_id": 2,
-      "content": "Find the one ?",
-      "type": "objective",
-      "options": ["Option A","Option B","Option C","Option D"],
-      "answer": "Option B"
-  },
-  {
-      "question_id": 3,
-      "content": "what is that ?",
-      "type": "descriptive",
-      "options": [""],
-      "answer": "this is the answer guys !"
-  },
-  {
-      "question_id": 4,
-      "content": "is that false ?",
-      "type": "yes_no",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 5,
-      "content": "find the two?",
-      "type": "objective",
-      "options": ["Option A","Option B","Option C","Option D"],
-      "answer": ""
-  },
-  {
-      "question_id": 6,
-      "content": "what are these ?",
-      "type": "descriptive",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 7,
-      "content": "is that that?",
-      "type": "yes_no",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 8,
-      "content": "what are those ?",
-      "type": "objective",
-      "options": ["Option A","Option B","Option C","Option D"],
-      "answer": ""
-  },
-  {
-      "question_id": 9,
-      "content": "this is the descriptive ?",
-      "type": "descriptive",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 10,
-      "content": "is that this?",
-      "type": "yes_no",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 11,
-      "content": "where is that one?",
-      "type": "objective",
-      "options": ["Option A","Option B","Option C","Option D"],
-      "answer": ""
-  },
-  {
-      "question_id": 12,
-      "content": "how ?",
-      "type": "descriptive",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 13,
-      "content": "what is that ?",
-      "type": "yes_no",
-      "options": [""],
-      "answer": ""
-  },
-  {
-      "question_id": 14,
-      "content": "choose the best one?",
-      "type": "objective",
-      "options": ["Option A","Option B","Option C","Option D"],
-      "answer": ""
-  },
-  {
-      "question_id": 15,
-      "content": "what is going on ?",
-      "type": "descriptive",
-      "options": [""],
-      "answer": ""
-  }]
-};
