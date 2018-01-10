@@ -22,6 +22,9 @@ private _url = '';
   getRounds(id: string): Observable<Iround> {
     this._url = this._getRoundsUrl(id, this._authService.userProfile.auth_token);
     return this._http.get(this._url)
+    .do (
+      data => console.log('in service :', data)
+    )
     .catch(this._handleError);
   }
 

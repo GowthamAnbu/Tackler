@@ -11,6 +11,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { Iround } from '../../interfaces/iround';
+import { RoundService } from '../../services/round.service';
 
 @Component({
   selector: 'app-rounds',
@@ -28,11 +29,11 @@ export class RoundsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filter') filter: ElementRef;
 
-  constructor(private _activatedRoute: ActivatedRoute) { }
+  constructor(private _activatedRoute: ActivatedRoute, private _roundService: RoundService) { }
 
   ngOnInit() {
-    this._getJobs();
     this.interviewId = this._activatedRoute.snapshot.paramMap.get('id');
+    this._getJobs();
     this.setProperties();
   }
 
@@ -50,6 +51,14 @@ export class RoundsComponent implements OnInit {
 
   private _getJobs() {
     this._rounds = this._activatedRoute.snapshot.data['interviewRounds'].interview_rounds;
+    // this._roundService.getRounds(this._activatedRoute.snapshot.paramMap.get('id'))
+    // .subscribe(
+    //   data => {
+    //     console.log(data);
+    //     this._rounds = data['interview-rounds'];
+    //   },
+    //   err => console.log(err)
+    // );
   }
 
 }

@@ -26,6 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'rounds/:id',
+    runGuardsAndResolvers: 'always',
     component: RoundsComponent,
     canActivate: [AuthGuard],
     resolve: {interviewRounds: RoundListResolverService}

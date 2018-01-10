@@ -120,7 +120,7 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
   private _redirect() {
     this._submit(this.getIndex()); // can create a function to post all answers array :)
     this._finalHit();
-    this._stopTimer();
+    // this._stopTimer();
     this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
     this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
   }
@@ -151,7 +151,6 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
       data => {
         this.interviewRound = data['interview_round'];
         console.log(this.interviewRound);
-        console.log(this.interviewRound.start_time);
         if (this.interviewRound.start_time !== '') {
           this._setToggle(true);
           this._refresh();
@@ -219,7 +218,14 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
     this._questionService.completeInterview(
       this._activatedRoute.snapshot.paramMap.get('round_id'),
       this._activatedRoute.snapshot.paramMap.get('interview_id'))
-      .subscribe();
+      .subscribe(
+        data => {
+          this._stopTimer();
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 
   /**
