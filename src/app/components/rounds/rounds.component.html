@@ -9,10 +9,10 @@
         <ng-template #elseBlock>{{item.interview_level.name}} {{item.status}} </ng-template>
     </mat-cell>
   </ng-container>
-  <!-- <ng-container matColumnDef="scheduled_time">
+  <ng-container matColumnDef="scheduled_time">
     <mat-header-cell *matHeaderCellDef mat-sort-header>SCHEDULED TIME</mat-header-cell>
     <mat-cell *matCellDef="let item"> {{item.scheduled_time | date}} </mat-cell>
-  </ng-container> -->
+  </ng-container>
   <ng-container matColumnDef="status" >
     <mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</mat-header-cell>
     <mat-cell *matCellDef="let item">

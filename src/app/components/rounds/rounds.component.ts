@@ -21,7 +21,7 @@ import { RoundService } from '../../services/round.service';
 
 export class RoundsComponent implements OnInit {
 
-  displayedColumns: Array<string> = ['level', /*  'scheduled_time', */ 'status'];
+  displayedColumns: Array<string> = ['level',  'scheduled_time', 'status'];
   dataSource: RoundDataSource | null;
   private _rounds: Iround[] = [];
   interviewId: string;
@@ -110,7 +110,7 @@ export class RoundDataSource extends DataSource<any> {
 
         switch (this._sort.active) {
           case 'level': [propertyA, propertyB] = [a.interview_level.name, b.interview_level.name]; break;
-          // case 'scheduled_time': [propertyA, propertyB] = [a.scheduled_time, b.scheduled_time]; break;
+          case 'scheduled_time': [propertyA, propertyB] = [a.scheduled_time, b.scheduled_time]; break;
           case 'status': [propertyA, propertyB] = [a.status, b.status]; break;
         }
 
