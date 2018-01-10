@@ -55,7 +55,7 @@ export class RoundsComponent implements OnInit {
     // .subscribe(
     //   data => {
     //     console.log(data);
-    //     this._rounds = data['interview-rounds'];
+    //     this._rounds = data['interview_rounds'];
     //   },
     //   err => console.log(err)
     // );

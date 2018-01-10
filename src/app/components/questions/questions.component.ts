@@ -121,8 +121,8 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
     this._submit(this.getIndex()); // can create a function to post all answers array :)
     this._finalHit();
     // this._stopTimer();
-    this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
-    this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
+    // this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
+    // this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
   }
 
   private _getSeconds(ticks: number) {
@@ -221,6 +221,8 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
       .subscribe(
         data => {
           this._stopTimer();
+          this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
+          this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
         },
         err => {
           console.log(err);

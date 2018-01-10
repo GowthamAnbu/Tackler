@@ -25,8 +25,8 @@ const routes: Routes = [
     resolve: {jobs: JobListResolverService}
   },
   {
-    path: 'rounds/:id',
     runGuardsAndResolvers: 'always',
+    path: 'rounds/:id',
     component: RoundsComponent,
     canActivate: [AuthGuard],
     resolve: {interviewRounds: RoundListResolverService}
