@@ -31,7 +31,8 @@ private _postData: PostData;
 private _index: number;
 interviewRound: InterviewRound;
 private _answerChanged = false;
-toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
+private _value: boolean;
+toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
 
   constructor(private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -41,14 +42,17 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
 
   ngOnInit() {
     this._getQuestions();
-    // console.log(this.toggle.getValue());
-    if (this.toggle.getValue() === true) {
-      this._refresh();
-    }
   }
 
   private _refresh() {
-    this._getQuestions();
+    const counter = this._getCounter(this.interviewRound.current_time, this.interviewRound.end_time);
+    if (counter <= 0) {
+      this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
+      this.snackBar.open('you have already taken the test', 'warning', {
+        duration: 15000,
+      });
+      return;
+    }
     this._setIndex(0);
     this._startTimer(this.interviewRound.current_time, this.interviewRound.end_time);
   }
@@ -60,6 +64,11 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
 
   getIndex(): number {
     return this._index;
+  }
+
+  private _setToggle(value): void {
+    this._value = value;
+    this.toggle.next(value);
   }
 
   private _getCounter(startTime: string, endTime: string): number {
@@ -81,15 +90,7 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
   }
 
   private _startTimer(startTime: string, endTime: string) {
-    const counter = this._getCounter(startTime, endTime);
-    if (counter <= 0) {
-      this._redirect();
-      this.snackBar.open('Do not worry your answers are automatically SAVED and your TIME is OVER', 'success', {
-        duration: 15000,
-      });
-      return;
-    }
-    this._setTimerProperties(counter);
+    this._setTimerProperties(this._getCounter(startTime, endTime));
     const timer = Observable.timer(1, 1000);
     timer
     .take(this._counter)
@@ -111,12 +112,17 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
     }
   }
 
+  private _stopTimer() {
+    this._subject.next();
+    this._resetTimerProperties();
+  }
+
   private _redirect() {
     this._submit(this.getIndex()); // can create a function to post all answers array :)
     this._finalHit();
     this._stopTimer();
     this._closeDialog(); // can use toggle to do this on particular dialog box by using function getbyid
-    this._router.navigateByUrl('/rounds/1');
+    this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
   }
 
   private _getSeconds(ticks: number) {
@@ -144,7 +150,14 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
     .subscribe(
       data => {
         this.interviewRound = data['interview_round'];
-        // console.log(this.interviewRound);
+        console.log(this.interviewRound);
+        console.log(this.interviewRound.start_time);
+        if (this.interviewRound.start_time !== '') {
+          this._setToggle(true);
+          this._refresh();
+        }else {
+          this._setToggle(false);
+        }
       },
       err => {
         this.interviewRound = undefined;
@@ -167,9 +180,23 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
   takeTest(): void {
     this._setIndex(0);
     this._initialHit();
-    this._getQuestions();
-    this._startTimer(this.interviewRound.start_time, this.interviewRound.end_time);
-    this.toggle.next(true);
+  }
+
+  private _getUpdatedStartTime() {
+    this._questionService.getQuestions(
+      this._activatedRoute.snapshot.paramMap.get('round_id'),
+      this._activatedRoute.snapshot.paramMap.get('interview_id'))
+      .subscribe(
+        data => {
+        this.interviewRound = data['interview_round'];
+        this.toggle.next(true);
+        this._startTimer(this.interviewRound.start_time, this.interviewRound.end_time);
+      },
+      err => {
+        this.interviewRound = undefined;
+        console.log('err'); // have to do something here
+      }
+    );
   }
 
   /* timer hit after taking the test for security reasons */
@@ -177,7 +204,14 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
     this._questionService.startInterview(
       this._activatedRoute.snapshot.paramMap.get('round_id'),
       this._activatedRoute.snapshot.paramMap.get('interview_id'))
-      .subscribe();
+      .subscribe(
+        data => {
+          this._getUpdatedStartTime();
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 
   /* final timer hit to represent end of test */
@@ -240,11 +274,6 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(false) ;
   /** gets the questionId based on the index given */
   private _getQuestionId(index: number): number {
     return this.interviewRound.interview_questions[index].id;
-  }
-
-  private _stopTimer() {
-    this._subject.next();
-    this._resetTimerProperties();
   }
 
   /** actual api hit or service call  */

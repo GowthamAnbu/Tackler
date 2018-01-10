@@ -34,7 +34,7 @@ constructor(private _http: HttpClient, private _authService: AuthService) { }
     return url;
   }
 
-  startInterview(interviewId: string, interviewRoundId: string): Observable<void> {
+  startInterview(interviewId: string, interviewRoundId: string): Observable<any> {
     this._url = this._getTimerUrl(interviewId, interviewRoundId);
     let params = new HttpParams();
     params = params.append('auth_token', this._authService.userProfile.auth_token);

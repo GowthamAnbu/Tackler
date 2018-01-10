@@ -17,9 +17,12 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</mat-header-cell>
     <mat-cell *matCellDef="let item">
       <p [ngSwitch]="item.status" [style.color]="'white'">
-          <span *ngSwitchCase="'Yet to start'" [style.background-color]="'black'">
-            {{item.status}}
-          </span>
+        <span *ngSwitchCase="'Yet to start'" [style.background-color]="'black'">
+          {{item.status}}
+        </span>
+        <span *ngSwitchCase="'Attended'" [style.background-color]="'pink'">
+          {{item.status}}
+        </span>
         <span *ngSwitchCase="'Selected'" [style.background-color]="'green'">
           {{item.status}}
         </span>
