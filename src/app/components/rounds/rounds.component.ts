@@ -21,7 +21,7 @@ import { RoundService } from '../../services/round.service';
 
 export class RoundsComponent implements OnInit {
 
-  displayedColumns: Array<string> = ['level',  'scheduled_time', 'status'];
+  displayedColumns: Array<string> = ['level',  'scheduled_time', 'status', 'action'];
   dataSource: RoundDataSource | null;
   private _rounds: Iround[] = [];
   interviewId: string;

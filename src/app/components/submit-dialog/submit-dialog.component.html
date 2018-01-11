@@ -1,14 +1,20 @@
 <mat-card>
   <mat-card-content>
-  <p><strong> Click the confirm button to submit the result </strong></p>
-  <p><strong> Click the Cancel button to go back </strong></p>
-  <p *ngIf="data > 0">
-    Note:
-        You have {{data}} unanswered Questions
-  </p>
+  <!-- <p><strong> Click the confirm button to submit the result </strong></p>
+  <p><strong> Click the Cancel button to go back </strong></p> -->
+  <!-- <p *ngIf="data > 0;else #elseBlock">
+    <strong>You have <span class="text-danger">{{data}}</span> unanswered Questions</strong>
+  </p> -->
+  <ng-container *ngIf="data > 0; then thenTemplate; else elseTemplate"></ng-container>
+  <ng-template #thenTemplate>
+    <strong>You have <span class="text-danger">{{data}}</span> unanswered Questions</strong>
+  </ng-template>
+  <ng-template #elseTemplate>
+      <strong>You have answered all the questions</strong>
+  </ng-template>
 </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button (click)="onCloseTrue(true)" color="primary">Confirm</button>
-    <button mat-raised-button (click)="onCloseTrue(false)" color="primary">cancel</button>
+    <button mat-raised-button (click)="onClose(false)" color="primary" matTooltip="click  to continue test">cancel</button>
+    <button mat-raised-button (click)="onClose(true)" color="primary" matTooltip="click to finish test">Confirm</button>
   </mat-card-actions>
 </mat-card>

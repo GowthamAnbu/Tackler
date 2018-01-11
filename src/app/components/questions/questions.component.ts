@@ -300,6 +300,7 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
   }
 
   openDialog(): void {
+    this._submit(this.getIndex());
     const dialogRef = this.dialog.open(SubmitDialogComponent, {
       height: '250px',
       width: '500px',
@@ -317,7 +318,8 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
 
   private _afterClosed(result: boolean): void {
     if (result === true) {
-      this._redirect();
+      // this._redirect();
+      this._finalHit();
       this.snackBar.open('your answers are SAVED and you are redirected successfully', 'success', {
         duration: 15000,
       });

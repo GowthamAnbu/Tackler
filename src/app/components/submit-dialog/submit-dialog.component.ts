@@ -16,7 +16,7 @@ export class SubmitDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  onCloseTrue(result: boolean) {
+  onClose(result: boolean) {
     this.thisDialogRef.close(result);
   }
 

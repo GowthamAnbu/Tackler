@@ -1,12 +1,20 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row *ngIf="!authService.loggedIn">
-    <button mat-button [routerLink]="['/login']" routerLinkActive="active">Login</button>
+    <!-- <button mat-button [routerLink]="['/login']" routerLinkActive="active">Login</button> -->
+    Interview Login
   </mat-toolbar-row>
   <mat-toolbar-row *ngIf="authService.loggedIn">
     <button mat-button [routerLink]="['/dashboard/',authService.userProfile.auth_token]" routerLinkActive="active">Dashboard</button>
-    <button mat-button [matMenuTriggerFor]="menu" class="pull-right">{{authService.userProfile.full_name}}</button>
-    <mat-menu #menu="matMenu">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>
+        <i class="material-icons">account_box</i>
+      </mat-icon>
+    </button>
+    <!-- <button mat-button [matMenuTriggerFor]="menu">{{authService.userProfile.full_name}}</button> -->
+    <mat-menu #menu="matMenu" xPosition="after" yPosition="below" [overlapTrigger]="false">
+      <!-- <button mat-menu-item>{{authService.userProfile.full_name}}</button> -->
       <button mat-menu-item (click)="logout()" > logout</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
+

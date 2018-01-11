@@ -5,8 +5,9 @@
   <ng-container matColumnDef="level">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ROUND NAME</mat-header-cell>
     <mat-cell *matCellDef="let item">
-        <a [routerLink]="['/questions',interviewId,item.id]" *ngIf="item.status === 'Yet to start';else elseBlock" >{{item.interview_level.name}}</a>
-        <ng-template #elseBlock>{{item.interview_level.name}} {{item.status}} </ng-template>
+      {{item.interview_level.name}}
+        <!-- <a [routerLink]="['/questions',interviewId,item.id]" *ngIf="item.status === 'Yet to start';else elseBlock" >{{item.interview_level.name}}</a>
+        <ng-template #elseBlock>{{item.interview_level.name}}</ng-template> -->
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="scheduled_time">
@@ -42,6 +43,17 @@
           {{item.status}}
         </span>
       </p>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>ACTION</mat-header-cell>
+    <mat-cell *matCellDef="let item">
+      <button mat-icon-button *ngIf="item.status === 'Yet to start';else elseBlock">
+        <a [routerLink]="['/questions',interviewId,item.id]">
+          <i class="material-icons">mode_edit</i>
+        </a>
+      </button>
+      <ng-template #elseBlock>no action needed for this round</ng-template>
     </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
