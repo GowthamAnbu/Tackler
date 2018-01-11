@@ -1,10 +1,15 @@
-<div class="center_div clickable" [routerLink]="['/rounds',interview.id]">
+<div class="center_div clickable" [routerLink]="['/rounds',interview.id]" *ngIf="interview" >
   <mat-card>
     <mat-card-header>
       <mat-card-title class="txt-primary" >{{interview.job.title}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>Experience: {{interview.job.experience}}</p>
+       <ng-container *ngIf="experiencen < 1 ; else elseTemplate">
+         Experience: Fresher
+      </ng-container>
+      <ng-template #elseTemplate>
+          Experience: {{experience[0]}} years {{experience[1]}} months
+      </ng-template>
       <p>No of vacancies: {{interview.job.no_of_vacancies}}</p>
       <p>Skill sets needed: {{interview.job.skill_names}}</p>
       <p>Referral code: {{interview.job.referral_code}}</p>
