@@ -21,7 +21,10 @@
         <span *ngSwitchCase="'Yet to start'" [style.background-color]="'black'">
           {{item.status}}
         </span>
-        <span *ngSwitchCase="'Attended'" [style.background-color]="'pink'">
+        <span *ngSwitchCase="'Inprogress'" [style.background-color]="'black'">
+          {{item.status}}
+        </span>
+        <span *ngSwitchCase="'Completed'" [style.background-color]="'pink'">
           {{item.status}}
         </span>
         <span *ngSwitchCase="'Selected'" [style.background-color]="'green'">
@@ -36,7 +39,7 @@
         <span *ngSwitchCase="'Not attended'" [style.background-color]="'grey'">
           {{item.status}}
         </span>
-        <span *ngSwitchCase="'On Hold'" [style.background-color]="'brown'">
+        <span *ngSwitchCase="'Hold'" [style.background-color]="'brown'">
           {{item.status}}
         </span>
         <span *ngSwitchDefault [style.background-color]="'red'">
@@ -48,7 +51,7 @@
   <ng-container matColumnDef="action">
     <mat-header-cell *matHeaderCellDef>ACTION</mat-header-cell>
     <mat-cell *matCellDef="let item">
-      <button mat-icon-button *ngIf="item.status === 'Yet to start';else elseBlock">
+      <button mat-icon-button *ngIf="item.status === 'Yet to start'||item.status === 'Inprogress';else elseBlock">
         <a [routerLink]="['/questions',interviewId,item.id]">
           <i class="material-icons">mode_edit</i>
         </a>

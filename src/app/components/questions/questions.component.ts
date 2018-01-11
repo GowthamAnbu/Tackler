@@ -33,6 +33,7 @@ interviewRound: InterviewRound;
 private _answerChanged = false;
 private _value: boolean;
 toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
+indexes: Array<number> = [];
 
   constructor(private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -65,6 +66,29 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
   getIndex(): number {
     return this._index;
   }
+
+  private _getAllIndexes(): void {
+    let i = 0;
+    this.interviewRound.interview_questions.forEach(
+      item => {
+        console.log(i);
+        this.indexes.push(i);
+        i++;
+      }
+    );
+    // this._calculateIndexRows();
+  }
+
+  /* private _calculateIndexRows(): void {
+    const length: number = this.interviewRound.interview_questions.length;
+    let reminder: number = length;
+    let quotient = 0;
+    while (reminder !== 0) {
+      quotient += reminder / 5;
+      reminder = reminder % 5;
+    }
+    console.log(quotient);
+  } */
 
   private _setToggle(value): void {
     this._value = value;
@@ -157,6 +181,7 @@ toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
         }else {
           this._setToggle(false);
         }
+        this._getAllIndexes();
       },
       err => {
         this.interviewRound = undefined;

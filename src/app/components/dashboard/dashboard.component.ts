@@ -48,7 +48,7 @@ constructor(private _activatedRoute: ActivatedRoute) { }
   }
 
   private _getJobs() {
-    this._jobs = this._activatedRoute.snapshot.data['jobs'].interviews;
+    this._jobs = this._activatedRoute.snapshot.data['jobs'].interview;
   }
 
 }

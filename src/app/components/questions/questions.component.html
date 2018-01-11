@@ -39,7 +39,16 @@
       </mat-card-title>
     </mat-card-header> -->
     <mat-card-content>
-      QUESTION: {{interviewQuestion?.question.content}}
+      <span *ngFor="let i of indexes">
+        <ng-container *ngIf="interviewRound?.interview_questions[i].answer === ''; then thenTemplate; else elseTemplate"></ng-container>
+        <ng-template #thenTemplate>
+          <button mat-mini-fab (click)="goto(i)" color="warn">{{i+1}}</button>
+        </ng-template>
+        <ng-template #elseTemplate>
+          <button mat-mini-fab (click)="goto(i)" color="primary">{{i+1}}</button>
+        </ng-template>
+      </span>
+      <p>{{i+1}}.{{interviewQuestion?.question.content}}</p>
         <p [ngSwitch]="interviewQuestion?.question.question_type" [style.margin-top]="'25px'">
         <span *ngSwitchCase="'yes_no'">
           <mat-radio-group>
