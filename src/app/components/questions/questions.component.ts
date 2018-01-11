@@ -18,7 +18,7 @@ import { QuestionService } from '../../services/question.service';
   styleUrls: ['./questions.component.css']
 })
 
-export class QuestionsComponent implements OnInit {
+export class QuestionsComponent implements OnInit, OnDestroy {
 
 private _ticks: number;
 private _counter: number;
@@ -34,7 +34,7 @@ private _answerChanged = false;
 private _value: boolean;
 toggle: BehaviorSubject<boolean> = new BehaviorSubject(this._value) ;
 indexes: Array<number> = [];
-
+timer;
   constructor(private _router: Router,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -71,7 +71,6 @@ indexes: Array<number> = [];
     let i = 0;
     this.interviewRound.interview_questions.forEach(
       item => {
-        console.log(i);
         this.indexes.push(i);
         i++;
       }
@@ -116,7 +115,7 @@ indexes: Array<number> = [];
   private _startTimer(startTime: string, endTime: string) {
     this._setTimerProperties(this._getCounter(startTime, endTime));
     const timer = Observable.timer(1, 1000);
-    timer
+    this.timer = timer
     .take(this._counter)
     .takeUntil(this._subject)
     .map(() => --this._counter)
@@ -351,11 +350,11 @@ indexes: Array<number> = [];
     }
   }
 
-  /* ngOnDestroy(): void {
+  ngOnDestroy(): void {
     // Called once, before the instance is destroyed.
     // Add 'implements OnDestroy' to the class.
-    this.removeLocalTestTaken();
-  } */
+    this.timer.unsubscribe();
+  }
 
 }
 
