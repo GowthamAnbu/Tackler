@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" *ngIf="navbarService.visibility" >
   <mat-toolbar-row *ngIf="!authService.loggedIn">
     <!-- <button mat-button [routerLink]="['/login']" routerLinkActive="active">Login</button> -->
     Interview Login

@@ -11,6 +11,7 @@ import { MatDialog, MatSnackBar} from '@angular/material';
 import { InterviewRound} from '../../interfaces/interview-round';
 import { SubmitDialogComponent } from '../submit-dialog/submit-dialog.component';
 import { QuestionService } from '../../services/question.service';
+import { NavbarService } from '../../shared/services/navbar.service';
 
 @Component({
   selector: 'app-questions',
@@ -39,10 +40,12 @@ timer;
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private _questionService: QuestionService) { }
+    private _questionService: QuestionService,
+    public navbarService: NavbarService) { }
 
   ngOnInit() {
     this._getQuestions();
+    this.navbarService.visibility = false;
   }
 
   private _refresh() {
@@ -353,7 +356,10 @@ timer;
   ngOnDestroy(): void {
     // Called once, before the instance is destroyed.
     // Add 'implements OnDestroy' to the class.
-    this.timer.unsubscribe();
+    this.navbarService.visibility = true;
+    if (this.timer !== undefined) {
+      this.timer.unsubscribe();
+    }
   }
 
 }

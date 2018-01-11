@@ -23,6 +23,7 @@ import { QuestionListResolverService } from './services/question-list-resolver.s
 import { SubmitDialogComponent } from './components/submit-dialog/submit-dialog.component';
 import { LoginGuard } from './guards/login.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { NavbarService } from './shared/services/navbar.service';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { AuthGuard } from './guards/auth.guard';
     QuestionService,
     QuestionListResolverService,
     LoginGuard,
-    AuthGuard
+    AuthGuard,
+    NavbarService
   ],
   bootstrap: [AppComponent]
 })

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar} from '@angular/material';
 
 import { AuthService } from '../../../shared/services/auth.service';
+import { NavbarService } from '../../../shared/services/navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     public snackBar: MatSnackBar,
     public authService: AuthService,
-    private _router: Router ) { }
+    private _router: Router,
+    public navbarService: NavbarService ) { }
 
   ngOnInit() {
   }
