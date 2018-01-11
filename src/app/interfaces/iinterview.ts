@@ -1,6 +1,5 @@
-export interface Ijob {
+export interface Iinterview {
   id: number;
-  state: string;
   job: Job;
 }
 

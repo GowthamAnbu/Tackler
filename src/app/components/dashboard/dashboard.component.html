@@ -1,38 +1,14 @@
-<mat-input-container floatPlaceholder="never">
-  <input matInput #filter placeholder="Filter Applied Jobs">
-</mat-input-container>
-<mat-table #table [dataSource]="dataSource" matSort>
-  <ng-container matColumnDef="title">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>JOB TITLE</mat-header-cell>
-    <mat-cell *matCellDef="let item"><a [routerLink]="['/rounds',item.id]">{{item.job.title}}</a></mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="description">
-    <mat-header-cell *matHeaderCellDef>DESCRIPTION</mat-header-cell>
-    <mat-cell *matCellDef="let item"> {{item.job.description}} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="experience" >
-    <mat-header-cell *matHeaderCellDef mat-sort-header>EXPERIENCE</mat-header-cell>
-    <mat-cell *matCellDef="let item"> {{item.job.experience}} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="no_of_vacancies" >
-    <mat-header-cell *matHeaderCellDef mat-sort-header>VACANCIES</mat-header-cell>
-    <mat-cell *matCellDef="let item"> {{item.job.no_of_vacancies}} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="skills">
-    <mat-header-cell *matHeaderCellDef>SKILLS</mat-header-cell>
-    <mat-cell *matCellDef="let item">
-        {{item.job.skill_names}}
-    </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
-<div [style.display]="dataSource?.renderedData.length == 0 ? '' : 'none'">
-   No users found matching filter. use the <strong>JOB TITLE</strong> to search.
+<div class="center_div clickable" [routerLink]="['/rounds',interview.id]">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title class="txt-primary" >{{interview.job.title}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Experience: {{interview.job.experience}}</p>
+      <p>No of vacancies: {{interview.job.no_of_vacancies}}</p>
+      <p>Skill sets needed: {{interview.job.skill_names}}</p>
+      <p>Referral code: {{interview.job.referral_code}}</p>
+      <p>Description: {{interview.job.description}}</p>
+    </mat-card-content>
+  </mat-card>
 </div>
-<mat-paginator #paginator
-[length]="dataSource?.filteredData.length"
-[pageIndex]="0"
-[pageSize]="10"
-[pageSizeOptions]="[3, 5, 10]">
-</mat-paginator>

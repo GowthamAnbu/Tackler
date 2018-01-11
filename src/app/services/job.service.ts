@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-import { Ijob } from '../interfaces/ijob';
+import { Iinterview } from '../interfaces/iinterview';
 
 @Injectable()
 export class JobService {
@@ -12,9 +12,9 @@ private _url = 'http://192.168.7.80:3000/api/interviews';
 
   constructor(private _http: HttpClient) { }
 
-  getJobs(auth_token: string): Observable<Ijob[]> {
+  getJobs(auth_token: string): Observable<Iinterview> {
     const params = new HttpParams().set('auth_token', auth_token);
-    return this._http.get<Ijob[]>(this._url, {params} )
+    return this._http.get<Iinterview>(this._url, {params} )
     .catch(this._handleError);
   }
 

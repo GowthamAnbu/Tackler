@@ -22,7 +22,7 @@ const routes: Routes = [
     path: 'dashboard/:auth_token',
     component: DashboardComponent,
     canActivate: [AuthGuard],
-    resolve: {jobs: JobListResolverService}
+    resolve: {interview: JobListResolverService}
   },
   {
     runGuardsAndResolvers: 'always',

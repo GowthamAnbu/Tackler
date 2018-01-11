@@ -1,0 +1,19 @@
+.center_div{
+  width:300px;
+  height:200px;
+  position:absolute;
+  left:50%;
+  top:30%;
+  margin:-100px 0 0 -150px;
+}
+
+.clickable { cursor: pointer; }
+
+.bg-primary{
+  background-color: #673ab7;
+  color:white;
+}
+
+.txt-primary{
+  color:#673ab7;
+}
