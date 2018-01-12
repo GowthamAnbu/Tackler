@@ -51,10 +51,27 @@ timer;
   private _refresh() {
     const counter = this._getCounter(this.interviewRound.current_time, this.interviewRound.end_time);
     if (counter <= 0) {
-      this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
-      this.snackBar.open('you have already taken the test', 'warning', {
-        duration: 15000,
-      });
+      if (this.interviewRound.status !== 'Completed') {
+        this._questionService.completeInterview(
+          this._activatedRoute.snapshot.paramMap.get('round_id'),
+          this._activatedRoute.snapshot.paramMap.get('interview_id'))
+          .subscribe(
+            data => {
+              this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
+              this.snackBar.open('you have failed to finish the test your TIME is OVER', 'warning', {
+                duration: 15000,
+              });
+            },
+            err => {
+              console.log(err);
+            }
+          );
+      }else {
+        this._router.navigateByUrl(`/rounds/${this._activatedRoute.snapshot.paramMap.get('interview_id')}`);
+        this.snackBar.open('you have already taken the test', 'warning', {
+          duration: 15000,
+        });
+      }
       return;
     }
     this._setIndex(0);
