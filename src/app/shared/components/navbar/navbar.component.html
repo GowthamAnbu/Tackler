@@ -5,6 +5,7 @@
   </mat-toolbar-row>
   <mat-toolbar-row *ngIf="authService.loggedIn">
     <button mat-button [routerLink]="['/dashboard/',authService.userProfile.auth_token]" routerLinkActive="active">Dashboard</button>
+    <span style="flex: 1 1 auto;" ></span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>
         <i class="material-icons">account_box</i>

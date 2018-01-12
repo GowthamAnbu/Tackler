@@ -45,7 +45,7 @@ timer;
 
   ngOnInit() {
     this._getQuestions();
-    this.navbarService.visibility = false;
+    // this.navbarService.visibility = false;
   }
 
   private _refresh() {
@@ -179,6 +179,7 @@ timer;
         console.log(this.interviewRound);
         if (this.interviewRound.start_time !== '') {
           this._setToggle(true);
+          this.navbarService.visibility = false;
           this._refresh();
         }else {
           this._setToggle(false);
@@ -215,7 +216,8 @@ timer;
       .subscribe(
         data => {
         this.interviewRound = data['interview_round'];
-        this.toggle.next(true);
+        this._setToggle(true);
+        this.navbarService.visibility = false;
         this._startTimer(this.interviewRound.start_time, this.interviewRound.end_time);
       },
       err => {
